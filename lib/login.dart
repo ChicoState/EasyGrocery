@@ -30,25 +30,28 @@ class _MyLoginPageState extends State<MyLoginPage> {
           title: TextStyle(color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
       ),
-      //Adds Navigation bar to the bottom of the app screen
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
+        //Added a column in the center of the screen
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            //Added textboxes with an icon
             TextField(
               decoration: InputDecoration(icon: Icon(Icons.email), helperText: "Email")
             ),
             TextField(
               decoration: InputDecoration(icon: Icon(Icons.lock), helperText: "Password"),
               ),
+              //Added a submit button that goes to the next page upon press
               RaisedButton(
                 onPressed: () {
                    Navigator.push(context,
                    new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
                     );
                 },
+                //Labels the button with Submit
                 child: Text('Submit'),
                 )
           ],
