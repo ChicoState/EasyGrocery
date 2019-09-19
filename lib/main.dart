@@ -79,7 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
         centerTitle: true,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(widget.title),
         textTheme: TextTheme(
