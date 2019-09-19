@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'login.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,10 +21,12 @@ class MyApp extends StatelessWidget {
         // is not restarted.
 //        primarySwatch: Colors.,
       ),
-      home: MyHomePage(title: 'EasyGrocery'),
+      home: MyLoginPage(title: 'EasyGrocery'),
     );
   }
 }
+
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -46,6 +49,10 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //int _counter = 0;
   //final titlecolor = const Color(0x03FC94);
+
+  void submit(){
+    print("sup");
+  }
 
   /*void _incrementCounter() {
     setState(() {
@@ -70,6 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        centerTitle: true,
         backgroundColor: Colors.white,
         title: Text(widget.title),
         textTheme: TextTheme(
@@ -85,7 +93,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Expanded(child:
-            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: () {},),),
+            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: () {submit();},),),
             Expanded(child:
             IconButton(icon: Icon(Icons.save),  iconSize: 30, onPressed: () {},),),
             Expanded(child:
