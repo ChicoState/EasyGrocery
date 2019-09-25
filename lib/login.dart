@@ -16,6 +16,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
     print("sup");
   }
 
+  //Store values into these variables upon entering them into field
+  String _email, _password;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,33 +33,55 @@ class _MyLoginPageState extends State<MyLoginPage> {
           title: TextStyle(color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      //Added a form which will have a key to save input
+      body: Form(
+        key: _formKey, //Formkey to save input
+        //Formats input fields in a container with a padding to clean it up
+        child: new Container(
+           padding: new EdgeInsets.all(25.0), 
         //Added a column in the center of the screen
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //Added textboxes with an icon
-            TextField(
-              decoration: InputDecoration(icon: Icon(Icons.email), helperText: "Email")
+            TextFormField(
+              decoration: InputDecoration(icon: Icon(Icons.email), helperText: "Email"),
+              validator: (input){
+                if (input.isEmpty) {
+                  return "Please enter an Email.";
+                }
+              },
+              onSaved: (input) => _password = input,
             ),
-            TextField(
+            TextFormField(
               decoration: InputDecoration(icon: Icon(Icons.lock), helperText: "Password"),
+              validator: (input){
+                if (input.length < 6) {
+                  return "Please enter a Password at least 6 characters.";
+                }
+              },
+              onSaved: (input) => _email = input,
+              obscureText: true,
               ),
               //Added a submit button that goes to the next page upon press
               RaisedButton(
-                onPressed: () {
-                   Navigator.push(context,
-                   new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
-                    );
-                },
+                onPressed: login,
                 //Labels the button with Submit
                 child: Text('Submit'),
                 )
           ],
         ),
-      ),
+      ),),
     );
+  }
+  void login()
+  {
+    final formState = _formKey.currentState;
+    if (formState.validate()) {
+      //Firebase stuff
+      Navigator.push(context,
+      new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
+      );
+    }
   }
 }
