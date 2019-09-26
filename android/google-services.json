@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "736104337576",
+    "firebase_url": "https://easygrocery-85247.firebaseio.com",
+    "project_id": "easygrocery-85247",
+    "storage_bucket": "easygrocery-85247.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:736104337576:android:242c05a9ce86bd138af29d",
+        "android_client_info": {
+          "package_name": "com.EasyGrocery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "736104337576-3jct149m7f8bfs5s0nb4f8ivbsjrae58.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAANwrdpm-OJNTfJjT0YKKCYj3pkDVI79o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "736104337576-eqd5m9666hl44t5uhnbsnngked3bnved.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "736104337576-82r357uv2p7rdp76e3a5avbn4v3q83f1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.EasyGrocery"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
