@@ -1,5 +1,7 @@
  
+  import 'package:firebase_auth/firebase_auth.dart';
   import 'package:flutter/material.dart';
+  import 'package:flutter/rendering.dart';
   import 'main.dart';
   class MyLoginPage extends StatefulWidget {
   MyLoginPage({Key key, this.title}) : super(key: key);
@@ -18,6 +20,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
 
   //Store values into these variables upon entering them into field
   String _email, _password;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
@@ -45,43 +48,77 @@ class _MyLoginPageState extends State<MyLoginPage> {
           children: <Widget>[
             //Added textboxes with an icon
             TextFormField(
-              decoration: InputDecoration(icon: Icon(Icons.email), helperText: "Email"),
+              decoration: new InputDecoration(
+                icon: Icon(Icons.email, color: Colors.black), 
+                helperText: "Email", 
+                focusedBorder:UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.greenAccent, width: 2.0),
+                ),
+                ),
+              cursorColor: Colors.black,
+              
               validator: (input){
                 if (input.isEmpty) {
                   return "Please enter an Email.";
                 }
               },
-              onSaved: (input) => _password = input,
+              onSaved: (input) => _email = input,
             ),
             TextFormField(
-              decoration: InputDecoration(icon: Icon(Icons.lock), helperText: "Password"),
+              decoration: InputDecoration(
+                icon: Icon(Icons.lock, color: Colors.black), 
+                helperText: "Password", 
+                focusedBorder:UnderlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.greenAccent, width: 2.0),
+                ),
+                ),
+              cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
                   return "Please enter a Password at least 6 characters.";
                 }
               },
-              onSaved: (input) => _email = input,
+              onSaved: (input) => _password = input,
               obscureText: true,
               ),
               //Added a submit button that goes to the next page upon press
-              RaisedButton(
+              //and authenticates email and password
+              MaterialButton(
+                //Login button with styling
                 onPressed: login,
+                elevation: 5,
+                minWidth: 200,
+                color: Colors.greenAccent,
                 //Labels the button with Submit
                 child: Text('Submit'),
-                )
+                ),
+                MaterialButton(
+                  //Register button with styling
+                  onPressed: () {},
+                child: Text('Create an account'),
+                ),
           ],
         ),
       ),),
     );
   }
-  void login()
+  Future<void> login() async
   {
     final formState = _formKey.currentState;
+    //Validates the textfields with the validators that we had specified.
+    //It will be under the textformfield called validator, we will need
+    //to add more.
     if (formState.validate()) {
       //Firebase stuff
+      formState.save();
+      try {
+      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
       );
+      } catch (e) {
+        print(e.message);
+      }
     }
   }
 }
