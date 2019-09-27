@@ -1,7 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'register.dart';
 
-void main() => runApp(MyApp());
+var page = MyLoginPage;
+
+void main() {
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -49,6 +55,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   //int _counter = 0;
   //final titlecolor = const Color(0x03FC94);
+  final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
 
   void submit(){
     print("sup");
@@ -74,7 +81,16 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
+      //Used to open the drawer by affecting the state of the scaffold
+      key: _drawerKey,
       appBar: AppBar(
+        //Icon button that acts as a settings to logout under
+        leading: IconButton(
+          icon: Icon(Icons.settings, color: Colors.black,),
+          onPressed: () => _drawerKey.currentState.openDrawer()
+          ),
+        //Removes automatic back button on page
+        automaticallyImplyLeading: false,
         //centers the name of the app on the appbar
         centerTitle: true,
         // Here we take the value from the MyHomePage object that was created by
@@ -85,6 +101,37 @@ class _MyHomePageState extends State<MyHomePage> {
           title: TextStyle(color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
       ),
+      //Adds a drawer on the side that will act as a settings page
+      drawer: Drawer(
+        child: ListView(
+          // Important: Remove any padding from the ListView.
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('Settings'),
+              decoration: BoxDecoration(
+                color: Colors.blueGrey,
+              ),
+            ),
+            ListTile(
+              title: Text('Logout'),
+              onTap: () {
+                // Then close the drawer
+                Navigator.pop(context);
+                Navigator.push(context,
+                new MaterialPageRoute(builder: (context) => MyLoginPage(title: 'EasyGrocery')),
+                );
+              },
+            ),
+            ListTile(
+              title: Text('Close'),
+              onTap: () {
+                // Then close the drawer
+                Navigator.pop(context);
+              },
+            ),
+          ]
+      )),
       //Adds Navigation bar to the bottom of the app screen
       bottomNavigationBar: BottomAppBar (
         //color: Colors.greenAccent,
