@@ -85,10 +85,11 @@ class _MyHomePageState extends State<MyHomePage> {
       key: _drawerKey,
       appBar: AppBar(
         //Icon button that acts as a settings to logout under
-        leading: IconButton(
+        actions: <Widget>[
+        IconButton(
           icon: Icon(Icons.settings, color: Colors.black,),
-          onPressed: () => _drawerKey.currentState.openDrawer()
-          ),
+          onPressed: () => _drawerKey.currentState.openEndDrawer()
+          ),],
         //Removes automatic back button on page
         automaticallyImplyLeading: false,
         //centers the name of the app on the appbar
@@ -102,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       //Adds a drawer on the side that will act as a settings page
-      drawer: Drawer(
+      endDrawer: Drawer(
         child: ListView(
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
