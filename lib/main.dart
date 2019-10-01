@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'register.dart';
+import 'list.dart';
 
 var page = MyLoginPage;
 
@@ -142,9 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Expanded(child:
-            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: () {submit();},),),
+            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: () {
+              Navigator.push(context, new MaterialPageRoute(builder: (context) => GroceryList()),);  
+            },),),
             Expanded(child:
-            IconButton(icon: Icon(Icons.save),  iconSize: 30, onPressed: () {},),),
+            IconButton(icon: Icon(Icons.save),  iconSize: 30, onPressed: () {
+            },),),
             Expanded(child:
             IconButton(icon: Icon(Icons.monetization_on), iconSize: 30, onPressed: () {},),)
         ],

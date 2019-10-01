@@ -19,19 +19,42 @@ class GroceryListState extends State<GroceryList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        automaticallyImplyLeading: false,
         title: Text('My Grocery List'),
+        backgroundColor: Colors.white,
         textTheme: TextTheme(
           title: TextStyle(
               color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: Icon(Icons.add, color: Colors.black),
             onPressed: _addMenu,
           )
         ],
       ),
       body: _buildGroceryList(),
+      bottomNavigationBar: BottomAppBar (
+        //color: Colors.greenAccent,
+        child: new Row(
+          mainAxisSize: MainAxisSize.max,
+          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Expanded(child:
+            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: (){
+              Navigator.push(context, new MaterialPageRoute(builder: (context) => GroceryList()),);
+            },),),
+            Expanded(child:
+            IconButton(icon: Icon(Icons.save),  iconSize: 30, onPressed: () {
+            },),),
+            Expanded(child:
+            IconButton(icon: Icon(Icons.monetization_on), iconSize: 30, onPressed: () {},),)
+        ],
+        )
+
+      ),
     );
   }
 
@@ -75,6 +98,7 @@ class GroceryListState extends State<GroceryList> {
         builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBar(
+              backgroundColor: Colors.white,
               title: Text("Add An Item"),
             ),
             body: Form(
