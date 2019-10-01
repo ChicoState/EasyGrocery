@@ -60,8 +60,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
               cursorColor: Colors.black,
               
               validator: (input){
-                if (input.isEmpty) {
-                  return "Please enter an Email.";
+                //Valid email contains an "@" character
+                if (!input.contains('@')) {
+                  return "Please enter a valid Email.";
                 }
               },
               onSaved: (input) => _email = input,
