@@ -101,7 +101,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               
               validator: (input){
-                if (input.isEmpty) {
+                if (!input.contains('@')) {
                   return "Please enter an Email.";
                 }
               },
@@ -120,7 +120,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter a Password of at least 6 characters.";
                 }
               },
               onSaved: (input) => _password = input,
@@ -139,7 +139,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter a Password of at least 6 characters.";
                 }
                 if (input!=_password) {
                   return "Passwords must be the same.";
