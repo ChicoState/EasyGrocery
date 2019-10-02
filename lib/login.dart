@@ -78,7 +78,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter of a Password at least 6 characters.";
                 }
               },
               onSaved: (input) => _password = input,
