@@ -188,12 +188,51 @@ class GroceryListState extends State<GroceryList> {
     _textController.clear();
     _itemToAdd = "";
   }
+
+
+  void _favoritesMenu(){
+  Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (BuildContext context) {
+          final Iterable<ListTile> tiles = _favorites.map(
+            (String item){
+              return ListTile(
+                title: Text(
+                  item,
+                  style: _itemFont,
+                ),
+              );
+            }
+          );
+
+          final List<Widget> favorited = ListTile.divideTiles(
+              context: context,
+              tiles: tiles,
+            ).toList();
+
+          return Scaffold(
+            appBar: AppBar(
+              leading: BackButton(color: Colors.black),
+              automaticallyImplyLeading: false,
+              backgroundColor: Colors.white,
+              title: Text(
+                "Favorites",
+                style: TextStyle(color: Colors.black),  
+              ),
+            ),
+            body: ListView(children: favorited),
+          );
+        },
+      ),
+    );
+}
+
+
+
 } //GroceryListState
 
 
-void _favoritesMenu(){
-  
-}
+
 
 class GroceryList extends StatefulWidget {
   @override
