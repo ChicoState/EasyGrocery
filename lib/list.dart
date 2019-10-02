@@ -9,8 +9,12 @@ import 'register.dart';
 class GroceryListState extends State<GroceryList> {
   //variables for this class
   String _itemToAdd;
+  //list to contain all items in the users grocery list
   List<String> _groceryList = <String>[];
+  //set to contain all favorited items
+  Set<String> _favorites = Set<String>();
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
+  //global formkey for the form
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //text controller used to clear text form
   final TextEditingController _textController = new TextEditingController();
@@ -28,6 +32,10 @@ class GroceryListState extends State<GroceryList> {
               color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
         actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.list), color: Colors.black,
+            onPressed: _favoritesMenu,
+          ),
           IconButton(
             icon: Icon(Icons.add, color: Colors.black),
             onPressed: _addMenu,
@@ -76,20 +84,41 @@ class GroceryListState extends State<GroceryList> {
 
   //function to build each individual row of grocery list
   Widget _buildRow(String item) {
+    final bool alreadySaved = _favorites.contains(item);
     return ListTile(
         title: Text(
           item,
           style: _itemFont,
         ),
-        trailing: Icon(
-          Icons.delete,
-          color: Colors.red,
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(alreadySaved ? Icons.favorite : Icons.favorite_border),
+              color: alreadySaved ? Colors.red : null,
+              onPressed: () {
+                setState(() {
+                  if(alreadySaved){
+                    _favorites.remove(item);
+                  }
+                  else{
+                    _favorites.add(item);
+                  }
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              color: Colors.black,
+              onPressed: () {
+                setState(() {
+                  _groceryList.remove(item);
+                });
+              },
+            ),
+          ]
         ),
-        onTap: () {
-          setState(() {
-            _groceryList.remove(item);
-          });
-        });
+    );
   }
 
   void _addMenu() {
@@ -98,6 +127,8 @@ class GroceryListState extends State<GroceryList> {
         builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBar(
+              leading: BackButton(color: Colors.black),
+              automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
               title: Text("Add An Item"),
             ),
@@ -122,7 +153,7 @@ class GroceryListState extends State<GroceryList> {
                           ),
                         ),
                         cursorColor: Colors.black,
-                        validator: (input) {
+                        validator: (input){
                           if (input.isEmpty) {
                             return "Please enter an item.";
                           }
@@ -151,7 +182,6 @@ class GroceryListState extends State<GroceryList> {
   void addItem() {
     var formState = _formKey.currentState;
     formState.save();
-    print("Adding");
     if (_itemToAdd != "") {
       _groceryList.add(_itemToAdd);
     }
@@ -159,6 +189,11 @@ class GroceryListState extends State<GroceryList> {
     _itemToAdd = "";
   }
 } //GroceryListState
+
+
+void _favoritesMenu(){
+  
+}
 
 class GroceryList extends StatefulWidget {
   @override
