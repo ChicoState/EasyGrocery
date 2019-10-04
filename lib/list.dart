@@ -18,13 +18,16 @@ class GroceryListState extends State<GroceryList> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //text controller used to clear text form
   final TextEditingController _textController = new TextEditingController();
+  
+  
 
   //override the build function
   Widget build(BuildContext context) {
     return Scaffold(
+      /*
       appBar: AppBar(
-        leading: BackButton(color: Colors.black),
-        automaticallyImplyLeading: false,
+       // leading: BackButton(color: Colors.black),
+       // automaticallyImplyLeading: false,
         title: Text('My Grocery List'),
         backgroundColor: Colors.white,
         textTheme: TextTheme(
@@ -42,27 +45,42 @@ class GroceryListState extends State<GroceryList> {
           )
         ],
       ),
+      */
       body: _buildGroceryList(),
-      bottomNavigationBar: BottomAppBar (
-        //color: Colors.greenAccent,
-        child: new Row(
-          mainAxisSize: MainAxisSize.max,
-          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Expanded(child:
-            IconButton(icon: Icon(Icons.local_grocery_store),  iconSize: 30, onPressed: (){
-              Navigator.push(context, new MaterialPageRoute(builder: (context) => GroceryList()),);
-            },),),
-            Expanded(child:
-            IconButton(icon: Icon(Icons.save),  iconSize: 30, onPressed: () {
-            },),),
-            Expanded(child:
-            IconButton(icon: Icon(Icons.monetization_on), iconSize: 30, onPressed: () {},),)
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: 30),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: FloatingActionButton(
+                heroTag: "addButton",
+                onPressed: _addMenu,
+                child: Icon(Icons.add),
+                backgroundColor: Colors.green,
+              ),
+            )
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 30),
+            child:Center(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: new Text("${_groceryList.length} items")
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton(
+              heroTag: "favButton",
+              onPressed: _favoritesMenu,
+              child: Icon(Icons.list),
+              backgroundColor: Colors.green,
+            ),
+          )
         ],
-        )
-
-      ),
+      )
     );
   }
 
@@ -71,7 +89,7 @@ class GroceryListState extends State<GroceryList> {
     return ListView.separated(
         //add seperators between each row
         separatorBuilder: (context, i) => Divider(
-          color: Colors.black,
+         color: Colors.black,
         ),
         padding: const EdgeInsets.all(16.0),
         //number of items is the size of our list
