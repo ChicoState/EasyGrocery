@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EasyGrocery',
       theme: ThemeData(
+        primaryColor: Colors.green
       ),
       home: MyLoginPage(title: 'EasyGrocery'),
     );
@@ -77,11 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: <Widget>[
-            DrawerHeader(
+            Container(
+              height: 100,
+            child: DrawerHeader(
               child: Text('Settings'),
               decoration: BoxDecoration(
                 color: Colors.blueGrey,
               ),
+            ),
             ),
             ListTile(
               title: Text('Logout'),
