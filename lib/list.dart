@@ -10,7 +10,7 @@ class GroceryListState extends State<GroceryList> {
   //variables for this class
   String _itemToAdd;
   //list to contain all items in the users grocery list
-  List<String> _groceryList = <String>[];
+  List<String> _groceryList = <String>[""];
   //set to contain all favorited items
   Set<String> _favorites = Set<String>();
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
@@ -24,28 +24,6 @@ class GroceryListState extends State<GroceryList> {
   //override the build function
   Widget build(BuildContext context) {
     return Scaffold(
-      /*
-      appBar: AppBar(
-       // leading: BackButton(color: Colors.black),
-       // automaticallyImplyLeading: false,
-        title: Text('My Grocery List'),
-        backgroundColor: Colors.white,
-        textTheme: TextTheme(
-          title: TextStyle(
-              color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.list), color: Colors.black,
-            onPressed: _favoritesMenu,
-          ),
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.black),
-            onPressed: _addMenu,
-          )
-        ],
-      ),
-      */
       body: _buildGroceryList(),
       floatingActionButton: Stack(
         children: <Widget>[
@@ -66,7 +44,7 @@ class GroceryListState extends State<GroceryList> {
             child:Center(
               child: Align(
                 alignment: Alignment.bottomCenter,
-                child: new Text("${_groceryList.length} items")
+                child: new Text("${_groceryList.length-1} items")
               ),
             ),
           ),
@@ -103,7 +81,12 @@ class GroceryListState extends State<GroceryList> {
   //function to build each individual row of grocery list
   Widget _buildRow(String item) {
     final bool alreadySaved = _favorites.contains(item);
-    return ListTile(
+    //if else statement pads the bottom of the list so buttons don't cover items in list
+    if(item == ""){
+      return ListTile();
+    }
+    else{
+      return ListTile(
         title: Text(
           item,
           style: _itemFont,
@@ -136,7 +119,8 @@ class GroceryListState extends State<GroceryList> {
             ),
           ]
         ),
-    );
+      );
+    }
   }
 
   void _addMenu() {
@@ -201,7 +185,7 @@ class GroceryListState extends State<GroceryList> {
     var formState = _formKey.currentState;
     formState.save();
     if (_itemToAdd != "") {
-      _groceryList.add(_itemToAdd);
+      _groceryList.insert(0, _itemToAdd);
     }
     _textController.clear();
     _itemToAdd = "";
