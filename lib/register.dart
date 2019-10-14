@@ -2,7 +2,9 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/rendering.dart';
   import 'main.dart';
+  import 'home_page.dart';
   import 'login.dart';
+  import 'auth.dart';
 
 
   class MyRegisterPage extends StatefulWidget {
@@ -174,7 +176,9 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
       //formState.save();
       //Tries to make a Firebase account with the given information
       try {
-      FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+      final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+          print('Registered user: $userId');
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
       );

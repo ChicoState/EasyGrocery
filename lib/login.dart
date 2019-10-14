@@ -2,11 +2,14 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/rendering.dart';
   import 'main.dart';
+  import 'home_page.dart';
+  import 'auth.dart';
   import 'register.dart';
 
   class MyLoginPage extends StatefulWidget {
-  MyLoginPage({Key key, this.title}) : super(key: key);
-
+  MyLoginPage({Key key, this.title, this.onSignedIn}) : super(key: key);
+  //const MyLoginPage({Key key, this.title, this.onSignedIn});
+  final VoidCallback onSignedIn;
   final String title;
 
   @override
@@ -116,10 +119,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
       //Firebase stuff
       formState.save();
       try {
-      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
+      final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await auth.signInWithEmailAndPassword(_email, _password);
+      print('Signed in: $userId');
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
       );
+      widget.onSignedIn();
       } catch (e) {
         print(e.message);
       }
