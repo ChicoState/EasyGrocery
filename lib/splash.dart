@@ -6,8 +6,8 @@ import 'main.dart';
 import 'home_page.dart';
 import 'login.dart';
 
-class splash extends StatefulWidget {
-  splash({this.auth});
+class Splash extends StatefulWidget {
+  Splash({this.auth});
 
   final BaseAuth auth;
   @override 
@@ -20,7 +20,7 @@ enum AuthStatus {
   Not_Logged_in,
 }
 
-class _SplashState extends State<splash> {
+class _SplashState extends State<Splash> {
   AuthStatus authStatus = AuthStatus.Pending;
 
 
@@ -55,10 +55,12 @@ void _signedIn() {
       case AuthStatus.Not_Logged_in:
         return MyLoginPage(
           onSignedIn: _signedIn,
+          title: "EasyGrocery",
       );
       case AuthStatus.Logged_in:
         return MyHomePage(
-          onSignedOut: _signedOut,  
+          onSignedOut: _signedOut,
+          title: "EasyGrocery",  
       );
   }
   return null;

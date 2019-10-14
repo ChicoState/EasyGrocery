@@ -14,7 +14,7 @@ class MyHomePage extends StatefulWidget {
     try {
       final BaseAuth auth = AuthProvider.of(context).auth;
       await auth.signOut();
-      onSignedOut();
+      //onSignedOut();
     } catch (e) {
       print(e);
     }
@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         backgroundColor: Colors.white,
-        title: Text("BLAH"),
+        title: Text(widget.title),
         textTheme: TextTheme(
           title: TextStyle(color: Colors.greenAccent, fontSize: 25.0, fontFamily: 'roboto')
         ),
