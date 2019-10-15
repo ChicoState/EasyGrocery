@@ -16,13 +16,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return AuthProvider(
-      auth: Auth(),
-      child: MaterialApp(
+    return MaterialApp(
       title: 'EasyGrocery',
       theme: ThemeData(
       ),
-      home: Splash(),
+      home: Splash(
+      auth: new Auth(),
     ),
     );
   }

@@ -7,8 +7,9 @@
   import 'register.dart';
 
   class MyLoginPage extends StatefulWidget {
-  MyLoginPage({Key key, this.title, this.onSignedIn}) : super(key: key);
+  MyLoginPage({Key key, this.title, this.onSignedIn, this.auth}) : super(key: key);
   //const MyLoginPage({Key key, this.title, this.onSignedIn});
+  final BaseAuth auth;
   final VoidCallback onSignedIn;
   final String title;
 

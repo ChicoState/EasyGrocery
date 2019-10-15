@@ -22,22 +22,24 @@ enum AuthStatus {
 
 class _SplashState extends State<Splash> {
   AuthStatus authStatus = AuthStatus.Pending;
+  //String _userId = "";
 
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final BaseAuth auth = AuthProvider.of(context).auth;
-    auth.currentUser().then((String userId) {
+   initState() {
+    super.initState();
+    widget.auth.currentUser().then((userId) {
       setState(() {
         authStatus = userId == null ? AuthStatus.Not_Logged_in : AuthStatus.Logged_in;
       });
     });
-  }
+   }
+
+
 
 void _signedOut() {
   setState(() {
     authStatus = AuthStatus.Not_Logged_in;
+    //_userId = "";
   });
 }
 
@@ -47,24 +49,6 @@ void _signedIn() {
   });
 }
 
-@override
-  Widget build(BuildContext context) {
-    switch (authStatus) {
-      case AuthStatus.Pending:
-        return _buildWaitingScreen();
-      case AuthStatus.Not_Logged_in:
-        return MyLoginPage(
-          onSignedIn: _signedIn,
-          title: "EasyGrocery",
-      );
-      case AuthStatus.Logged_in:
-        return MyHomePage(
-          onSignedOut: _signedOut,
-          title: "EasyGrocery",  
-      );
-  }
-  return null;
- }
   Widget _buildWaitingScreen() {
     return Scaffold(
       body: Container(
@@ -73,4 +57,26 @@ void _signedIn() {
       ),
     );
   }
+
+@override
+  Widget build(BuildContext context) {
+    switch (authStatus) {
+      case AuthStatus.Pending:
+        return _buildWaitingScreen();
+      case AuthStatus.Not_Logged_in:
+        return MyLoginPage(
+          auth: widget.auth,
+          onSignedIn: _signedIn,
+          title: "EasyGrocery",
+      );
+      case AuthStatus.Logged_in:
+        return MyHomePage(
+          auth: widget.auth, 
+          onSignedOut: _signedOut,
+          title: "EasyGrocery",  
+      );
+  }
+  return null;
+ }
+
 }

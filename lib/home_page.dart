@@ -6,19 +6,21 @@ import 'package:flutter/material.dart';
 
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({this.onSignedOut, Key key, this.title}) : super(key: key);
+  const MyHomePage({this.onSignedOut, Key key, this.title, this.auth}) : super(key: key);
   final VoidCallback onSignedOut;
   final String title;
+  final BaseAuth auth;
 
-    static Future<void> _signOut(BuildContext context) async {
-    try {
+   /* Future<void> _signOut(BuildContext context) async {
+    try {Future<void> 
       final BaseAuth auth = AuthProvider.of(context).auth;
       await auth.signOut();
-      //onSignedOut();
+      onSignedOut();
     } catch (e) {
       print(e);
     }
   }
+  */
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -26,6 +28,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   //final VoidCallback onSignedOut;
+   _signOut(BuildContext context) async {
+    try {
+      //final BaseAuth auth = AuthProvider.of(context).auth;
+      await widget.auth.signOut();
+      
+      widget.onSignedOut();
+    } catch (e) {
+      print(e);
+    }
+  }
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   int _currentIndex=0;
   final List<Widget> _pages = [
@@ -80,15 +92,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ListTile(
               title: Text('Logout'),
-              onTap: () {
+              onTap: () { 
                 // Then close the drawer
                 Navigator.pop(context);
-                  MyHomePage._signOut(context);
+                _signOut(context);
                 
-
+              }
                 //Navigator.push(context,
                 //new MaterialPageRoute(builder: (context) => MyLoginPage(title: 'EasyGrocery')),
-              }
+              //}
             ),
             ListTile(
               title: Text('Close'),

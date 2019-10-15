@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class BaseAuth {
@@ -33,7 +32,7 @@ class Auth implements BaseAuth {
 
 }
 
-class AuthProvider extends InheritedWidget {
+/*class AuthProvider extends InheritedWidget {
   const AuthProvider({Key key, Widget child, this.auth}) : super(key: key, child: child);
   final BaseAuth auth;
 
@@ -44,3 +43,4 @@ class AuthProvider extends InheritedWidget {
     return context.inheritFromWidgetOfExactType(AuthProvider);
   }
 }
+*/
