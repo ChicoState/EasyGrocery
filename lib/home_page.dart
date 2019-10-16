@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Logout'),
               onTap: () { 
                 // Then close the drawer
-                Navigator.pop(context);
+                //Navigator.pop(context);
                 _signOut(context);
                 
               }

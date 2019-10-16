@@ -123,9 +123,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
       //final BaseAuth auth = AuthProvider.of(context).auth;
       final String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
       print('Signed in: $userId');
-      Navigator.push(context,
-      new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
-      );
+      //Navigator.push(context,
+      //new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
+      //);
       widget.onSignedIn();
       } catch (e) {
         print(e.message);
