@@ -120,8 +120,8 @@ class _MyLoginPageState extends State<MyLoginPage> {
       //Firebase stuff
       formState.save();
       try {
-      final BaseAuth auth = AuthProvider.of(context).auth;
-      final String userId = await auth.signInWithEmailAndPassword(_email, _password);
+      //final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
       print('Signed in: $userId');
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),

@@ -8,8 +8,8 @@
 
 
   class MyRegisterPage extends StatefulWidget {
-  MyRegisterPage({Key key, this.title}) : super(key: key);
-
+  MyRegisterPage({Key key, this.title, this.auth}) : super(key: key);
+  final BaseAuth auth;
   final String title;
 
   @override
@@ -176,8 +176,8 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
       //formState.save();
       //Tries to make a Firebase account with the given information
       try {
-      final BaseAuth auth = AuthProvider.of(context).auth;
-      final String userId = await auth.createUserWithEmailAndPassword(_email, _password);
+      //final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
           print('Registered user: $userId');
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
