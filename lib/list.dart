@@ -128,6 +128,7 @@ class GroceryListState extends State<GroceryList> {
   void _searchMenu() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
+        maintainState: true,
         builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBar(
@@ -140,6 +141,10 @@ class GroceryListState extends State<GroceryList> {
               Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    onTap: () {
+                      //clear search list when text field is tapped
+                      _searchList.clear();
+                    },
                     onChanged: (value) {
                       _searchString = value;
                     },
@@ -155,7 +160,7 @@ class GroceryListState extends State<GroceryList> {
               //Search button
               MaterialButton(
                 onPressed: () {
-                  FocusScope.of(context).unfocus(); //dismiss keyboard
+                  FocusScope.of(context).previousFocus(); //dismiss keyboard
                   _search();
                 },
                 elevation: 5,
@@ -229,19 +234,20 @@ class GroceryListState extends State<GroceryList> {
   ///@param{String} itemName the name of the item to add to the list
   void _addItem(String itemName) {
       setState(() {
-        //no duplicate items in list
-        if(! _groceryList.contains(itemName)){
-          _groceryList.insert(0, itemName);
-          _searchList = new List.from(_searchList)..remove(itemName);
-        }
         _textController.clear();
         _searchString = "";
-        print("List size = " + _searchList.length.toString() );
+        //no duplicate items in list
+        if(! _groceryList.contains(itemName)){
+          _searchList = List.from(_searchList);
+          _groceryList.insert(0, itemName);
+        }
+        //move to previous focus to update list (maybe)
+        FocusScope.of(context).previousFocus();
       });
   }
 
   void _favoritesMenu(){
-  Navigator.of(context).push(
+    Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
           final Iterable<Card> tiles = _favorites.map(
