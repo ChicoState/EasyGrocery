@@ -18,7 +18,7 @@ class GroceryListState extends State<GroceryList> {
   final TextEditingController _textController = new TextEditingController();
 
   //List to hold all items in search menu
-  List<String> _searchList = <String>[];
+  List<String> _searchList = new List<String>();
   
   
 
@@ -66,6 +66,7 @@ class GroceryListState extends State<GroceryList> {
   //function to build grocery list from _groceryList variable
   Widget _buildGroceryList() {
     return ListView.builder(
+        key: UniqueKey(),
         padding: const EdgeInsets.all(10.0),
         //number of items is the size of our list
         itemCount: _groceryList.length,
@@ -192,6 +193,7 @@ class GroceryListState extends State<GroceryList> {
   /// builds a list of items that are similar to what the user has searched for
   Widget _buildSearchList() {
     return ListView.builder(
+        key: UniqueKey(),
         padding: const EdgeInsets.all(10.0),
         //number of items is the size of our list
         itemCount: _searchList.length,
@@ -214,7 +216,9 @@ class GroceryListState extends State<GroceryList> {
       trailing: IconButton(
         icon: Icon(_groceryList.contains(item) ? (Icons.check_circle) :(Icons.add)),
         color: Colors.green,
-        onPressed: (){ _addItem(item); },  
+        onPressed: ()  {
+          _addItem(item);
+        },
       ),
       ),
     );
@@ -228,7 +232,7 @@ class GroceryListState extends State<GroceryList> {
         //no duplicate items in list
         if(! _groceryList.contains(itemName)){
           _groceryList.insert(0, itemName);
-          _searchList.remove(itemName);
+          _searchList = new List.from(_searchList)..remove(itemName);
         }
         _textController.clear();
         _searchString = "";
@@ -240,14 +244,14 @@ class GroceryListState extends State<GroceryList> {
   Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final Iterable<ListTile> tiles = _favorites.map(
+          final Iterable<Card> tiles = _favorites.map(
             (String item){
-              return ListTile(
+              return Card( child:ListTile(
                 title: Text(
                   item,
                   style: _itemFont,
                 ),
-              );
+              ));
             }
           );
 
