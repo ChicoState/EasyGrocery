@@ -64,12 +64,8 @@ class GroceryListState extends State<GroceryList> {
 
   //function to build grocery list from _groceryList variable
   Widget _buildGroceryList() {
-    return ListView.separated(
-        //add seperators between each row
-        separatorBuilder: (context, i) => Divider(
-         color: Colors.black,
-        ),
-        padding: const EdgeInsets.all(16.0),
+    return ListView.builder(
+        padding: const EdgeInsets.all(10.0),
         //number of items is the size of our list
         itemCount: _groceryList.length,
         itemBuilder: (context, i) {
@@ -86,7 +82,8 @@ class GroceryListState extends State<GroceryList> {
       return ListTile();
     }
     else{
-      return ListTile(
+      return Card( 
+        child: ListTile(
         title: Text(
           item,
           style: _itemFont,
@@ -119,7 +116,7 @@ class GroceryListState extends State<GroceryList> {
             ),
           ]
         ),
-      );
+      ));
     }
   }
 
