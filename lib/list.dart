@@ -8,16 +8,17 @@ import 'register.dart';
 
 class GroceryListState extends State<GroceryList> {
   //variables for this class
-  String _itemToAdd;
+  String _searchString = "";
   //list to contain all items in the users grocery list
   List<String> _groceryList = <String>[""];
   //set to contain all favorited items
   Set<String> _favorites = Set<String>();
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
-  //global formkey for the form
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   //text controller used to clear text form
   final TextEditingController _textController = new TextEditingController();
+
+  //List to hold all items in search menu
+  List<String> _searchList = new List<String>();
   
   
 
@@ -33,7 +34,7 @@ class GroceryListState extends State<GroceryList> {
               alignment: Alignment.bottomLeft,
               child: FloatingActionButton(
                 heroTag: "addButton",
-                onPressed: _addMenu,
+                onPressed: _searchMenu,
                 child: Icon(Icons.add),
                 backgroundColor: Colors.green,
               ),
@@ -64,29 +65,27 @@ class GroceryListState extends State<GroceryList> {
 
   //function to build grocery list from _groceryList variable
   Widget _buildGroceryList() {
-    return ListView.separated(
-        //add seperators between each row
-        separatorBuilder: (context, i) => Divider(
-         color: Colors.black,
-        ),
-        padding: const EdgeInsets.all(16.0),
+    return ListView.builder(
+        key: UniqueKey(),
+        padding: const EdgeInsets.all(10.0),
         //number of items is the size of our list
         itemCount: _groceryList.length,
         itemBuilder: (context, i) {
           //build each individual row
-          return _buildRow(_groceryList[i]);
+          return _buildGroceryRow(_groceryList[i]);
         });
   }
 
   //function to build each individual row of grocery list
-  Widget _buildRow(String item) {
+  Widget _buildGroceryRow(String item) {
     final bool alreadySaved = _favorites.contains(item);
     //if else statement pads the bottom of the list so buttons don't cover items in list
     if(item == ""){
       return ListTile();
     }
     else{
-      return ListTile(
+      return Card( 
+        child: ListTile(
         title: Text(
           item,
           style: _itemFont,
@@ -119,91 +118,146 @@ class GroceryListState extends State<GroceryList> {
             ),
           ]
         ),
-      );
+      ));
     }
   }
 
-  void _addMenu() {
+  ///_searchMenu function
+  ///Displays a page where the user can search for an item in our database
+  ///and then add that item to the list
+  void _searchMenu() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
+        maintainState: true,
         builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBar(
               leading: BackButton(color: Colors.black),
               automaticallyImplyLeading: false,
               backgroundColor: Colors.white,
-              title: Text("Add An Item"),
+              title: Text("Add An Item", style: TextStyle(color: Colors.black)),
             ),
-            body: Form(
-              key: _formKey,
-              child: new Container(
-                padding: new EdgeInsets.all(25.0),
-                //Added a column in the center of the screen
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      //Added textboxes with an icon
-                      //item textfield
-                      TextFormField(
-                        controller: _textController,
-                        decoration: new InputDecoration(
-                          icon: Icon(Icons.add_shopping_cart, color: Colors.black),
-                          helperText: "Item Name",
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: Colors.greenAccent, width: 2.0),
-                          ),
-                        ),
-                        cursorColor: Colors.black,
-                        validator: (input){
-                          if (input.isEmpty) {
-                            return "Please enter an item.";
-                          }
-                        },
-                        onSaved: (input) => _itemToAdd = input,
-                      ),
-                      MaterialButton(
-                        //Login button with styling
-                        onPressed: addItem,
-                        elevation: 5,
-                        minWidth: 200,
-                        color: Colors.greenAccent,
-                        //Labels the button with Submit
-                        child: Text('Add'),
-                      ),
-                    ]
-                  )
+            body: Column(children: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    onTap: () {
+                      //clear search list when text field is tapped
+                      _searchList.clear();
+                    },
+                    onChanged: (value) {
+                      _searchString = value;
+                    },
+                    controller: _textController,
+                    decoration: InputDecoration(
+                        labelText: "Search",
+                        hintText: "Search",
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(25.0)))),
+                  )),
+              //Search button
+              MaterialButton(
+                onPressed: () {
+                  FocusScope.of(context).previousFocus(); //dismiss keyboard
+                  _search();
+                },
+                elevation: 5,
+                minWidth: 200,
+                color: Colors.greenAccent,
+                //Labels the button with search
+                child: Text('Search'),
               ),
-            )
+              //List of items to add
+              Expanded(child: _buildSearchList(), ),
+            ]),
           );
         },
       ),
     );
   }
 
-  void addItem() {
-    var formState = _formKey.currentState;
-    formState.save();
-    if (_itemToAdd != "") {
-      _groceryList.insert(0, _itemToAdd);
-    }
-    _textController.clear();
-    _itemToAdd = "";
+  /// search function
+  /// for now just adds item to search list
+  /// later with grab items from database
+  void _search() {
+    print("Search");
+    setState(() {
+      //clear current search list
+      _searchList = new List<String>();
+      if (_searchString != "") {
+        _searchList.insert(0, _searchString);
+      }
+      //clear text
+      _textController.clear();
+    });
   }
 
+  /// _buildSearchList function
+  /// builds a list of items that are similar to what the user has searched for
+  Widget _buildSearchList() {
+    return ListView.builder(
+        key: UniqueKey(),
+        padding: const EdgeInsets.all(10.0),
+        //number of items is the size of our list
+        itemCount: _searchList.length,
+        itemBuilder: (context, i) {
+          //build each individual row
+          return _buildSearchRow(_searchList[i]);
+        });
+  }
+
+  ///buildSearchRow function
+  /// builds each individual row of the seach list that is displayed to the user
+  //function to build each individual row of grocery list
+  Widget _buildSearchRow(String item) {
+    return Card(
+      child: ListTile(
+      title: Text(
+        item,
+        style: _itemFont,
+      ),
+      trailing: IconButton(
+        icon: Icon(_groceryList.contains(item) ? (Icons.check_circle) :(Icons.add)),
+        color: Colors.green,
+        onPressed: ()  {
+          _addItem(item);
+        },
+      ),
+      ),
+    );
+  }
+
+  ///addItem function:
+  ///Adds an item to the grocery list
+  ///@param{String} itemName the name of the item to add to the list
+  void _addItem(String itemName) {
+      setState(() {
+        _textController.clear();
+        _searchString = "";
+        //no duplicate items in list
+        if(! _groceryList.contains(itemName)){
+          _searchList = List.from(_searchList);
+          _groceryList.insert(0, itemName);
+        }
+        //move to previous focus to update list (maybe)
+        FocusScope.of(context).previousFocus();
+      });
+  }
 
   void _favoritesMenu(){
-  Navigator.of(context).push(
+    Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final Iterable<ListTile> tiles = _favorites.map(
+          final Iterable<Card> tiles = _favorites.map(
             (String item){
-              return ListTile(
+              return Card( child:ListTile(
                 title: Text(
                   item,
                   style: _itemFont,
                 ),
-              );
+              ));
             }
           );
 
