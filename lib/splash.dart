@@ -5,7 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'main.dart';
 import 'home_page.dart';
 import 'login.dart';
-
+//Splash page as an intermediate page between loading up the app, as
+// a means to redirect users that are already authenticated.
 class Splash extends StatefulWidget {
   Splash({this.auth});
 
@@ -13,7 +14,7 @@ class Splash extends StatefulWidget {
   @override 
   State<StatefulWidget> createState() => new _SplashState();
 }
-
+// Three possible statuses of the app user
 enum AuthStatus { 
   Pending,
   Logged_in,
@@ -22,7 +23,6 @@ enum AuthStatus {
 
 class _SplashState extends State<Splash> {
   AuthStatus authStatus = AuthStatus.Pending;
-  //String _userId = "";
 
 
    initState() {
@@ -39,7 +39,6 @@ class _SplashState extends State<Splash> {
 void _signedOut() {
   setState(() {
     authStatus = AuthStatus.Not_Logged_in;
-    //_userId = "";
   });
 }
 
@@ -48,7 +47,7 @@ void _signedIn() {
     authStatus = AuthStatus.Logged_in;
   });
 }
-
+// Simple Waiting screen to be shown while log in is pending
   Widget _buildWaitingScreen() {
     return Scaffold(
       body: Container(

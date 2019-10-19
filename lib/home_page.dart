@@ -2,6 +2,8 @@ import 'auth.dart';
 import 'list.dart';
 import 'login.dart';
 import 'package:flutter/material.dart';
+import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
+import 'package:circular_bottom_navigation/tab_item.dart';
 
 
 
@@ -11,26 +13,13 @@ class MyHomePage extends StatefulWidget {
   final String title;
   final BaseAuth auth;
 
-   /* Future<void> _signOut(BuildContext context) async {
-    try {Future<void> 
-      final BaseAuth auth = AuthProvider.of(context).auth;
-      await auth.signOut();
-      onSignedOut();
-    } catch (e) {
-      print(e);
-    }
-  }
-  */
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //final VoidCallback onSignedOut;
    _signOut(BuildContext context) async {
     try {
-      //final BaseAuth auth = AuthProvider.of(context).auth;
       await widget.auth.signOut();
       
       widget.onSignedOut();
@@ -39,19 +28,24 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
-  int _currentIndex=0;
+  static int _currentIndex=0;
   final List<Widget> _pages = [
     PlaceHolderWidget(Colors.white),
     GroceryList(),
     PlaceHolderWidget(Colors.green)
   ];
 
-  //Future<void> _signOut()
   
 
-  void submit(){
-    print("sup");
-  }
+  //controller for circular bottom nav bar
+  CircularBottomNavigationController _navigationController = 
+  new CircularBottomNavigationController(_currentIndex);
+  //List of tabItems for circulatr bottom navigation bar
+  List<TabItem> tabItems =  List.of([
+    new TabItem(Icons.home, "Home", Colors.green, labelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.green),),
+    new TabItem(Icons.library_books, "List", Colors.green, labelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.green)),
+    new TabItem(Icons.monetization_on, "Prices", Colors.green, labelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.green)),
+  ]);
 
 
   @override
@@ -93,14 +87,10 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('Logout'),
               onTap: () { 
-                // Then close the drawer
-                //Navigator.pop(context);
+
                 _signOut(context);
                 
               }
-                //Navigator.push(context,
-                //new MaterialPageRoute(builder: (context) => MyLoginPage(title: 'EasyGrocery')),
-              //}
             ),
             ListTile(
               title: Text('Close'),
@@ -116,25 +106,17 @@ class _MyHomePageState extends State<MyHomePage> {
       body: _pages[_currentIndex],
 
       //Adds Navigation bar to the bottom of the app screen
-      bottomNavigationBar: BottomNavigationBar (
-        onTap: changeTab,
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
-            title: new Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.library_books),
-            title: new Text('List'),
-          ),
-          BottomNavigationBarItem(
-            icon: new Icon(Icons.monetization_on),
-            title: new Text('Prices'),
-          ),
-        ],
-
-      ),
+      bottomNavigationBar: CircularBottomNavigation(
+        tabItems,
+        controller: _navigationController,
+        selectedCallback: (int selectedPos){
+          //call set state and update index of current page
+          setState(() {
+            _navigationController.value = selectedPos;
+            _currentIndex = selectedPos;
+          });
+        },
+      )
     );
   }
 

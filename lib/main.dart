@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'EasyGrocery',
       theme: ThemeData(
+        primaryColor: Colors.green
       ),
       home: Splash(
       auth: new Auth(),
