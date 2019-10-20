@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 
+//Firebase Database
+import 'package:firebase_database/firebase_database.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -27,6 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e);
     }
   }
+
+  //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex=0;
   final List<Widget> _pages = [
@@ -88,6 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Logout'),
               onTap: () { 
 
+                Navigator.pop(context);
                 _signOut(context);
                 
               }
@@ -95,6 +100,12 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('Close'),
               onTap: () {
+                //WIP
+                final dbRef = FirebaseDatabase.instance.reference();
+                dbRef.child('blahfornow').set({
+                'item': 'eggs',
+                });
+
                 // Then close the drawer
                 Navigator.pop(context);
               },

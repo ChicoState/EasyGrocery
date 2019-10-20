@@ -160,7 +160,7 @@ class GroceryListState extends State<GroceryList> {
               //Search button
               MaterialButton(
                 onPressed: () {
-                  FocusScope.of(context).previousFocus(); //dismiss keyboard
+                  //FocusScope.of(context).previousFocus(); //dismiss keyboard
                   _search();
                 },
                 elevation: 5,
@@ -242,7 +242,7 @@ class GroceryListState extends State<GroceryList> {
           _groceryList.insert(0, itemName);
         }
         //move to previous focus to update list (maybe)
-        FocusScope.of(context).previousFocus();
+        //FocusScope.of(context).previousFocus();
       });
   }
 
