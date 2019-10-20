@@ -1,10 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
 import 'login.dart';
-import 'register.dart';
-import 'list.dart';
 import 'auth.dart';
 import 'splash.dart';
 
