@@ -2,11 +2,15 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/rendering.dart';
   import 'main.dart';
+  import 'home_page.dart';
+  import 'auth.dart';
   import 'register.dart';
 
   class MyLoginPage extends StatefulWidget {
-  MyLoginPage({Key key, this.title}) : super(key: key);
-
+  MyLoginPage({Key key, this.title, this.onSignedIn, this.auth}) : super(key: key);
+  //const MyLoginPage({Key key, this.title, this.onSignedIn});
+  final BaseAuth auth;
+  final VoidCallback onSignedIn;
   final String title;
 
   @override
@@ -60,8 +64,9 @@ class _MyLoginPageState extends State<MyLoginPage> {
               cursorColor: Colors.black,
               
               validator: (input){
-                if (input.isEmpty) {
-                  return "Please enter an Email.";
+                //Valid email contains an "@" character
+                if (!input.contains('@')) {
+                  return "Please enter a valid Email.";
                 }
               },
               onSaved: (input) => _email = input,
@@ -77,7 +82,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter of a Password at least 6 characters.";
                 }
               },
               onSaved: (input) => _password = input,
@@ -115,10 +120,13 @@ class _MyLoginPageState extends State<MyLoginPage> {
       //Firebase stuff
       formState.save();
       try {
-      FirebaseUser user = await FirebaseAuth.instance.signInWithEmailAndPassword(email: _email, password: _password);
-      Navigator.push(context,
-      new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
-      );
+      //final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await widget.auth.signInWithEmailAndPassword(_email, _password);
+      print('Signed in: $userId');
+      //Navigator.push(context,
+      //new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
+      //);
+      widget.onSignedIn();
       } catch (e) {
         print(e.message);
       }

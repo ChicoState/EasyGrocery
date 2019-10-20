@@ -1,58 +1,41 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'auth.dart';
+import 'list.dart';
+import 'login.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
-import 'login.dart';
-import 'register.dart';
-import 'list.dart';
-import 'auth.dart';
-import 'splash.dart';
-
-var page = MyLoginPage;
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'EasyGrocery',
-      theme: ThemeData(
-        primaryColor: Colors.green
-      ),
-      home: Splash(
-      auth: new Auth(),
-    ),
-    );
-  }
-}
 
 
-<<<<<<< HEAD
-=======
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
+  const MyHomePage({this.onSignedOut, Key key, this.title, this.auth}) : super(key: key);
+  final VoidCallback onSignedOut;
   final String title;
+  final BaseAuth auth;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+   _signOut(BuildContext context) async {
+    try {
+      await widget.auth.signOut();
+      
+      widget.onSignedOut();
+    } catch (e) {
+      print(e);
+    }
+  }
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
-  
-  static int _currentIndex = 0; //index of current tab
-  //List of widgets to be displayed for each tab
+  static int _currentIndex=0;
   final List<Widget> _pages = [
     PlaceHolderWidget(Colors.white),
     GroceryList(),
     PlaceHolderWidget(Colors.green)
   ];
+
+  
 
   //controller for circular bottom nav bar
   CircularBottomNavigationController _navigationController = 
@@ -63,6 +46,8 @@ class _MyHomePageState extends State<MyHomePage> {
     new TabItem(Icons.library_books, "List", Colors.green, labelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.green)),
     new TabItem(Icons.monetization_on, "Prices", Colors.green, labelStyle: TextStyle(fontWeight: FontWeight.normal, color: Colors.green)),
   ]);
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,24 +78,19 @@ class _MyHomePageState extends State<MyHomePage> {
           // Important: Remove any padding from the ListView.
           padding: EdgeInsets.zero,
           children: <Widget>[
-            Container(
-              height: 100,
-            child: DrawerHeader(
+            DrawerHeader(
               child: Text('Settings'),
               decoration: BoxDecoration(
                 color: Colors.blueGrey,
               ),
             ),
-            ),
             ListTile(
               title: Text('Logout'),
-              onTap: () {
-                // Then close the drawer
-                Navigator.pop(context);
-                Navigator.push(context,
-                new MaterialPageRoute(builder: (context) => MyLoginPage(title: 'EasyGrocery')),
-                );
-              },
+              onTap: () { 
+
+                _signOut(context);
+                
+              }
             ),
             ListTile(
               title: Text('Close'),
@@ -147,6 +127,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+
+
 class PlaceHolderWidget extends StatelessWidget{
   final Color color;
   PlaceHolderWidget(this.color);
@@ -158,4 +140,3 @@ class PlaceHolderWidget extends StatelessWidget{
     );
   }
 }
->>>>>>> 1c5b2051233a840934cfeafc882aab8d6da20a48
