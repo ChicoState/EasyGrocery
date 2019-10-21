@@ -6,6 +6,9 @@ import 'login.dart';
 import 'register.dart';
 import 'auth.dart';
 
+//Firebase Database
+import 'package:firebase_database/firebase_database.dart';
+
 class GroceryList extends StatefulWidget {
   GroceryList({this.auth});
   final BaseAuth auth;
@@ -243,7 +246,13 @@ class GroceryListState extends State<GroceryList> {
   ///addItem function:
   ///Adds an item to the grocery list
   ///@param{String} itemName the name of the item to add to the list
-  void _addItem(String itemName) {
+  void _addItem(String itemName) async {
+          final dbRef = FirebaseDatabase.instance.reference();
+          final String uid = await widget.auth.currentUser();
+          //print(uid);
+          dbRef.child(uid).set({
+          'item': itemName,
+          }); 
       setState(() {
         _textController.clear();
         _searchString = "";

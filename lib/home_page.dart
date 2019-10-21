@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
 
-//Firebase Database
-import 'package:firebase_database/firebase_database.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -30,22 +28,9 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-   initState() {
-    super.initState();
-    widget.auth.currentUser().then((userId) {
-    });
-   }
-
   //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex=0;
-  final List<Widget> _pages = [
-    PlaceHolderWidget(Colors.white),
-    GroceryList(),
-    PlaceHolderWidget(Colors.green)
-  ];
-
-  
 
   //controller for circular bottom nav bar
   CircularBottomNavigationController _navigationController = 
@@ -60,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      PlaceHolderWidget(Colors.white),
+      GroceryList(auth: widget.auth),
+      PlaceHolderWidget(Colors.green)
+    ];
     return Scaffold(
       //Used to open the drawer by affecting the state of the scaffold
       key: _drawerKey,
@@ -106,12 +96,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ListTile(
               title: Text('Close'),
               onTap: () {
-                //WIP
-                final dbRef = FirebaseDatabase.instance.reference();
-                dbRef.child('blahfornow').set({
-                'item': 'eggs',
-                });
-
                 // Then close the drawer
                 Navigator.pop(context);
               },
