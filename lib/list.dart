@@ -29,8 +29,6 @@ class GroceryListState extends State<GroceryList> {
   //text controller used to clear text form
   final TextEditingController _textController = new TextEditingController();
 
-  //Grabs current Firebase user
-
   //List to hold all items in search menu
   List<String> _searchList = new List<String>();
   
@@ -249,9 +247,12 @@ class GroceryListState extends State<GroceryList> {
   void _addItem(String itemName) async {
           final dbRef = FirebaseDatabase.instance.reference();
           final String uid = await widget.auth.currentUser();
+          List<String> items = new List<String>();
+          items.add("blah");
+          items.add(itemName);
           //print(uid);
           dbRef.child(uid).set({
-          'item': itemName,
+          'items': items,
           }); 
       setState(() {
         _textController.clear();
