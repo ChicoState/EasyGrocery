@@ -2,12 +2,14 @@
   import 'package:flutter/material.dart';
   import 'package:flutter/rendering.dart';
   import 'main.dart';
+  import 'home_page.dart';
   import 'login.dart';
+  import 'auth.dart';
 
 
   class MyRegisterPage extends StatefulWidget {
-  MyRegisterPage({Key key, this.title}) : super(key: key);
-
+  MyRegisterPage({Key key, this.title, this.auth}) : super(key: key);
+  final BaseAuth auth;
   final String title;
 
   @override
@@ -101,7 +103,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               
               validator: (input){
-                if (input.isEmpty) {
+                if (!input.contains('@')) {
                   return "Please enter an Email.";
                 }
               },
@@ -120,7 +122,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter a Password of at least 6 characters.";
                 }
               },
               onSaved: (input) => _password = input,
@@ -139,7 +141,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               cursorColor: Colors.black,
               validator: (input){
                 if (input.length < 6) {
-                  return "Please enter a Password at least 6 characters.";
+                  return "Please enter a Password of at least 6 characters.";
                 }
                 if (input!=_password) {
                   return "Passwords must be the same.";
@@ -174,7 +176,9 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
       //formState.save();
       //Tries to make a Firebase account with the given information
       try {
-      FirebaseUser user = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password);
+      //final BaseAuth auth = AuthProvider.of(context).auth;
+      final String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
+          print('Registered user: $userId');
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
       );
