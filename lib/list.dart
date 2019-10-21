@@ -4,7 +4,16 @@ import 'package:flutter/rendering.dart';
 import 'main.dart';
 import 'login.dart';
 import 'register.dart';
+import 'auth.dart';
 
+class GroceryList extends StatefulWidget {
+  GroceryList({this.auth});
+  final BaseAuth auth;
+
+  @override
+  GroceryListState createState() => GroceryListState();
+
+}
 
 class GroceryListState extends State<GroceryList> {
   //variables for this class
@@ -16,6 +25,8 @@ class GroceryListState extends State<GroceryList> {
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
   //text controller used to clear text form
   final TextEditingController _textController = new TextEditingController();
+
+  //Grabs current Firebase user
 
   //List to hold all items in search menu
   List<String> _searchList = new List<String>();
@@ -160,7 +171,7 @@ class GroceryListState extends State<GroceryList> {
               //Search button
               MaterialButton(
                 onPressed: () {
-                  //FocusScope.of(context).previousFocus(); //dismiss keyboard
+                  FocusScope.of(context).previousFocus(); //dismiss keyboard
                   _search();
                 },
                 elevation: 5,
@@ -242,7 +253,7 @@ class GroceryListState extends State<GroceryList> {
           _groceryList.insert(0, itemName);
         }
         //move to previous focus to update list (maybe)
-        //FocusScope.of(context).previousFocus();
+        FocusScope.of(context).previousFocus();
       });
   }
 
@@ -289,8 +300,3 @@ class GroceryListState extends State<GroceryList> {
 
 
 
-
-class GroceryList extends StatefulWidget {
-  @override
-  GroceryListState createState() => GroceryListState();
-}

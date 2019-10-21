@@ -30,6 +30,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+   initState() {
+    super.initState();
+    widget.auth.currentUser().then((userId) {
+    });
+   }
+
   //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex=0;
