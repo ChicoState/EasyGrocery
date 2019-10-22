@@ -154,10 +154,12 @@ class GroceryListState extends State<GroceryList> {
     await dbRef.child("$uid/items").once().then((DataSnapshot data) {
       items = data.value;
         if(items != null){
-        setState(() {
-          var tempo = new List<String>.from(items.cast<String>().toList());
-          _groceryList = tempo;
-        });
+          if (!mounted)
+            return;
+          setState(() {
+            var tempo = new List<String>.from(items.cast<String>().toList());
+            _groceryList = tempo;
+          });
       }
       else{
         items = new List<String>();
