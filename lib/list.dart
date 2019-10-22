@@ -150,6 +150,7 @@ class GroceryListState extends State<GroceryList> {
 
 //Initialize variables UID and Item list
   Future initializeVars() async {
+    if (mounted) {
     uid = await widget.auth.currentUser();
     await dbRef.child("$uid/items").once().then((DataSnapshot data) {
       items = data.value;
@@ -162,7 +163,7 @@ class GroceryListState extends State<GroceryList> {
       else{
         items = new List<String>();
       }
-    });
+    });}
   }
 
 //Add to Firebase
