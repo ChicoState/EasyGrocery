@@ -136,6 +136,7 @@ class GroceryListState extends State<GroceryList> {
               icon: Icon(Icons.delete),
               color: Colors.black,
               onPressed: () {
+                removeFB(item);
                 setState(() {
                   _groceryList.remove(item);
                 });
@@ -263,7 +264,29 @@ Future initializeVars() async {
   uid = await widget.auth.currentUser();
   await dbRef.child("$uid/items").once().then((DataSnapshot data) {
     items = data.value;
+    setState(() {
+      var tempo = new List<String>.from(items);
+      _groceryList = tempo;
+      });
     });
+}
+
+void addFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.add(itemName);
+    dbRef.child(uid).set({
+      'items' : tempo,
+    });
+    initializeVars();
+}
+
+void removeFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.remove(itemName);
+    dbRef.child(uid).set({
+      'items' : tempo,
+    });
+    initializeVars();
 }
 
   ///addItem function:
@@ -273,13 +296,7 @@ Future initializeVars() async {
     print("Calling additem");
     print(uid);
     print(items);
-//    items.add(itemName);
-    var tempo = new List<String>.from(items);
-    tempo.add(itemName);
-    dbRef.child(uid).set({
-      'items' : tempo,
-    });
-    initializeVars();
+    addFB(itemName);
       setState(() {
         _textController.clear();
         _searchString = "";
