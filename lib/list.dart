@@ -1,20 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'auth.dart';
 import 'search.dart';
+//Firebase Database
+import 'package:firebase_database/firebase_database.dart';
 
 class GroceryList extends StatefulWidget {
+  GroceryList({this.auth});
+  final BaseAuth auth;
+
   @override
   GroceryListState createState() => GroceryListState();
 }
 
+
 class GroceryListState extends State<GroceryList> {
-  //variables for this class
+  //Firebase database reference
+  final dbRef = FirebaseDatabase.instance.reference();
   //list to contain all items in the users grocery list
   List<String> _groceryList = <String>[""];
   //set to contain all favorited items
   Set<String> _favorites = Set<String>();
   //Text styling for list tiles
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
+  //List to store items from Firebase side
+  List items = [];
+  //User's UID
+  String uid = "";
+
+  //Calls this to initialize the above two variables
+  void initState() {
+    initializeVars();
+    super.initState();
+  }
 
   //override the build function
   Widget build(BuildContext context) {
@@ -98,6 +116,7 @@ class GroceryListState extends State<GroceryList> {
             icon: Icon(Icons.delete),
             color: Colors.black,
             onPressed: () {
+              removeFB(item);
               setState(() {
                 _groceryList.remove(item);
               });
@@ -113,6 +132,7 @@ class GroceryListState extends State<GroceryList> {
   //so that it can update the grocerylist
   void _addItemCallback(String item) {
     _groceryList.insert(0, item);
+    addFB(item);
   }
 
   ///_searchMenu function
@@ -124,6 +144,38 @@ class GroceryListState extends State<GroceryList> {
           builder: (context) => SearchList(
               groceryList: _groceryList, addCallback: _addItemCallback)),
     );
+  }
+
+//Initialize variables UID and Item list
+  Future initializeVars() async {
+    uid = await widget.auth.currentUser();
+    await dbRef.child("$uid/items").once().then((DataSnapshot data) {
+      items = data.value;
+      setState(() {
+        var tempo = new List<String>.from(items);
+        _groceryList = tempo;
+      });
+    });
+  }
+
+//Add to Firebase
+  void addFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.add(itemName);
+    dbRef.child(uid).set({
+      'items': tempo,
+    });
+    initializeVars();
+  }
+
+//Remove from Firebase
+  void removeFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.remove(itemName);
+    dbRef.child(uid).set({
+      'items': tempo,
+    });
+    initializeVars();
   }
 
   void _favoritesMenu() {

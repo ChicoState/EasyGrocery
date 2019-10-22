@@ -27,15 +27,10 @@ class _MyHomePageState extends State<MyHomePage> {
       print(e);
     }
   }
+
+  //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex=0;
-  final List<Widget> _pages = [
-    PlaceHolderWidget(Colors.white),
-    GroceryList(),
-    PlaceHolderWidget(Colors.green)
-  ];
-
-  
 
   //controller for circular bottom nav bar
   CircularBottomNavigationController _navigationController = 
@@ -50,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      PlaceHolderWidget(Colors.white),
+      GroceryList(auth: widget.auth),
+      PlaceHolderWidget(Colors.green)
+    ];
     return Scaffold(
       //Used to open the drawer by affecting the state of the scaffold
       key: _drawerKey,
@@ -88,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               title: Text('Logout'),
               onTap: () { 
 
+                Navigator.pop(context);
                 _signOut(context);
                 
               }

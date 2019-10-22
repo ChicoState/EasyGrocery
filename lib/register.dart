@@ -6,6 +6,9 @@
   import 'login.dart';
   import 'auth.dart';
 
+  //Firebase Database
+  import 'package:firebase_database/firebase_database.dart';
+
 
   class MyRegisterPage extends StatefulWidget {
   MyRegisterPage({Key key, this.title, this.auth}) : super(key: key);
@@ -21,6 +24,8 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
 
   //Store values into these variables upon entering them into field
   String _email, _password, _fname, _lname, _cpassword;
+
+  final dbRef = FirebaseDatabase.instance.reference();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -179,6 +184,11 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
       //final BaseAuth auth = AuthProvider.of(context).auth;
       final String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
           print('Registered user: $userId');
+      //WIP
+      //dbRef.child('$userId').set({
+      //  'first name': _fname,
+      //});
+
       Navigator.push(context,
       new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
       );
