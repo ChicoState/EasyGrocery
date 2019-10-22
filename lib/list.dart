@@ -1,12 +1,28 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/rendering.dart';
 import 'main.dart';
 import 'login.dart';
 import 'register.dart';
+import 'auth.dart';
 
+//Firebase Database
+import 'package:firebase_database/firebase_database.dart';
+
+
+class GroceryList extends StatefulWidget {
+  GroceryList({this.auth});
+  final BaseAuth auth;
+
+  @override
+  GroceryListState createState() => GroceryListState();
+
+}
 
 class GroceryListState extends State<GroceryList> {
+  //Firebase database reference
+  final dbRef = FirebaseDatabase.instance.reference();
   //variables for this class
   String _searchString = "";
   //list to contain all items in the users grocery list
@@ -19,9 +35,18 @@ class GroceryListState extends State<GroceryList> {
 
   //List to hold all items in search menu
   List<String> _searchList = new List<String>();
-  
-  
 
+  //List to store items from Firebase side
+  List items = [];
+  //User's UID
+  String uid = "";
+
+  //Calls this to initialize the above two variables
+  void initState() {
+    initializeVars();
+    super.initState();
+  }
+  
   //override the build function
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,6 +136,7 @@ class GroceryListState extends State<GroceryList> {
               icon: Icon(Icons.delete),
               color: Colors.black,
               onPressed: () {
+                removeFB(item);
                 setState(() {
                   _groceryList.remove(item);
                 });
@@ -229,10 +255,43 @@ class GroceryListState extends State<GroceryList> {
     );
   }
 
+//Initialize variables UID and Item list
+Future initializeVars() async {
+  uid = await widget.auth.currentUser();
+  await dbRef.child("$uid/items").once().then((DataSnapshot data) {
+    items = data.value;
+    setState(() {
+      var tempo = new List<String>.from(items);
+      _groceryList = tempo;
+      });
+    });
+}
+
+//Add to Firebase
+void addFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.add(itemName);
+    dbRef.child(uid).set({
+      'items' : tempo,
+    });
+    initializeVars();
+}
+
+//Remove from Firebase
+void removeFB(String itemName) {
+    var tempo = new List<String>.from(items);
+    tempo.remove(itemName);
+    dbRef.child(uid).set({
+      'items' : tempo,
+    });
+    initializeVars();
+}
+
   ///addItem function:
   ///Adds an item to the grocery list
   ///@param{String} itemName the name of the item to add to the list
   void _addItem(String itemName) {
+      addFB(itemName);
       setState(() {
         _textController.clear();
         _searchString = "";
@@ -289,8 +348,3 @@ class GroceryListState extends State<GroceryList> {
 
 
 
-
-class GroceryList extends StatefulWidget {
-  @override
-  GroceryListState createState() => GroceryListState();
-}
