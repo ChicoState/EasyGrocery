@@ -36,16 +36,16 @@ class GroceryListState extends State<GroceryList> {
   //List to hold all items in search menu
   List<String> _searchList = new List<String>();
 
-
-  //Testing area
-  //List = grabList(uid);
+  //List to store items from Firebase side
   List items = [];
+  //User's UID
   String uid = "";
+
+  //Calls this to initialize the above two variables
   void initState() {
     initializeVars();
     super.initState();
   }
-  //End testing area
   
   //override the build function
   Widget build(BuildContext context) {
@@ -254,12 +254,8 @@ class GroceryListState extends State<GroceryList> {
       ),
     );
   }
-    /*temp.add(itemName);
-    dbRef.child(uid).set({
-      'items': temp,
-      }); 
-      */
 
+//Initialize variables UID and Item list
 Future initializeVars() async {
   uid = await widget.auth.currentUser();
   await dbRef.child("$uid/items").once().then((DataSnapshot data) {
@@ -271,6 +267,7 @@ Future initializeVars() async {
     });
 }
 
+//Add to Firebase
 void addFB(String itemName) {
     var tempo = new List<String>.from(items);
     tempo.add(itemName);
@@ -280,6 +277,7 @@ void addFB(String itemName) {
     initializeVars();
 }
 
+//Remove from Firebase
 void removeFB(String itemName) {
     var tempo = new List<String>.from(items);
     tempo.remove(itemName);
@@ -293,10 +291,7 @@ void removeFB(String itemName) {
   ///Adds an item to the grocery list
   ///@param{String} itemName the name of the item to add to the list
   void _addItem(String itemName) {
-    print("Calling additem");
-    print(uid);
-    print(items);
-    addFB(itemName);
+      addFB(itemName);
       setState(() {
         _textController.clear();
         _searchString = "";
