@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as prefix0;
 import 'package:flutter/rendering.dart';
 import 'main.dart';
 import 'login.dart';
@@ -8,6 +9,7 @@ import 'auth.dart';
 
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
+
 
 class GroceryList extends StatefulWidget {
   GroceryList({this.auth});
@@ -19,6 +21,8 @@ class GroceryList extends StatefulWidget {
 }
 
 class GroceryListState extends State<GroceryList> {
+  //Firebase database reference
+  final dbRef = FirebaseDatabase.instance.reference();
   //variables for this class
   String _searchString = "";
   //list to contain all items in the users grocery list
@@ -31,9 +35,18 @@ class GroceryListState extends State<GroceryList> {
 
   //List to hold all items in search menu
   List<String> _searchList = new List<String>();
-  
-  
 
+
+  //Testing area
+  //List = grabList(uid);
+  List items = [];
+  String uid = "";
+  void initState() {
+    initializeVars();
+    super.initState();
+  }
+  //End testing area
+  
   //override the build function
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,20 +253,33 @@ class GroceryListState extends State<GroceryList> {
       ),
     );
   }
+    /*temp.add(itemName);
+    dbRef.child(uid).set({
+      'items': temp,
+      }); 
+      */
+
+Future initializeVars() async {
+  uid = await widget.auth.currentUser();
+  await dbRef.child("$uid/items").once().then((DataSnapshot data) {
+    items = data.value;
+    });
+}
 
   ///addItem function:
   ///Adds an item to the grocery list
   ///@param{String} itemName the name of the item to add to the list
-  void _addItem(String itemName) async {
-          final dbRef = FirebaseDatabase.instance.reference();
-          final String uid = await widget.auth.currentUser();
-          List<String> items = new List<String>();
-          items.add("blah");
-          items.add(itemName);
-          //print(uid);
-          dbRef.child(uid).set({
-          'items': items,
-          }); 
+  void _addItem(String itemName) {
+    print("Calling additem");
+    print(uid);
+    print(items);
+//    items.add(itemName);
+    var tempo = new List<String>.from(items);
+    tempo.add(itemName);
+    dbRef.child(uid).set({
+      'items' : tempo,
+    });
+    initializeVars();
       setState(() {
         _textController.clear();
         _searchString = "";
