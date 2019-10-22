@@ -18,13 +18,13 @@ class GroceryListState extends State<GroceryList> {
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
   //list to contain all items in the users grocery list
-  List<String> _groceryList = <String>[""];
+  List<String> _groceryList = <String>[];
   //set to contain all favorited items
   Set<String> _favorites = Set<String>();
   //Text styling for list tiles
   final TextStyle _itemFont = const TextStyle(fontSize: 18.0);
   //List to store items from Firebase side
-  List items = [];
+  List<dynamic> items = [];
   //User's UID
   String uid = "";
 
@@ -56,7 +56,7 @@ class GroceryListState extends State<GroceryList> {
               child: Center(
                 child: Align(
                     alignment: Alignment.bottomCenter,
-                    child: new Text("${_groceryList.length - 1} items")),
+                    child: new Text("${_groceryList.length} items")),
               ),
             ),
             Align(
@@ -131,8 +131,10 @@ class GroceryListState extends State<GroceryList> {
   //This function is passed to the child searchMenu
   //so that it can update the grocerylist
   void _addItemCallback(String item) {
-    _groceryList.insert(0, item);
     addFB(item);
+    setState(() {
+      _groceryList.insert(0, item);
+    });
   }
 
   ///_searchMenu function
@@ -151,16 +153,22 @@ class GroceryListState extends State<GroceryList> {
     uid = await widget.auth.currentUser();
     await dbRef.child("$uid/items").once().then((DataSnapshot data) {
       items = data.value;
-      setState(() {
-        var tempo = new List<String>.from(items);
-        _groceryList = tempo;
-      });
+        if(items != null){
+        setState(() {
+          var tempo = new List<String>.from(items.cast<String>().toList());
+          _groceryList = tempo;
+        });
+      }
+      else{
+        items = new List<String>();
+      }
     });
   }
 
 //Add to Firebase
   void addFB(String itemName) {
-    var tempo = new List<String>.from(items);
+    //cast items to list of strings and build new list
+    var tempo = new List<String>.from(items.cast<String>().toList());
     tempo.add(itemName);
     dbRef.child(uid).set({
       'items': tempo,
