@@ -23,7 +23,7 @@ file.close()
 
 #function to compare words
 def compareWords(a,b):
-    print("------------------------------------")
+    #print("------------------------------------")
     l1=len(a)
     l2=len(b)
     half = float((l1+l2)/2)
@@ -36,12 +36,13 @@ def compareWords(a,b):
         if word in d.split():
             count += 1.0
     
-    print(a)
-    print(b)
+    #print(a)
+    #print(b)
     result = float(count/half)
-
-    print(result)
-    print("------------------------------------")
+    if(result>=0.1):
+        print(result,a,b)
+    #print(result)
+   # print("------------------------------------")
 
 #iterate through the words to compare
 for a in range(0,count):
