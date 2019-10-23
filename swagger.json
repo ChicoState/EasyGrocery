@@ -3161,6 +3161,7 @@
           "authorizationCode": {
             "authorizationUrl": "https://api.kroger.com/v1/connect/oauth2/authorize",
             "tokenUrl": "https://api.kroger.com/v1/connect/oauth2/token",
+           // WILL --> https://console.firebase.google.com/project/easygrocery-85247
             "scopes": {
               "profile.compact": "Grants read access to a customer profile ID.",
               "cart.basic:write": "Grants write access to a customer's cart.",
