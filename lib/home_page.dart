@@ -89,12 +89,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 // Important: Remove any padding from the ListView.
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-              DrawerHeader(
+                  Container(
+                  height: 100,
+              child: DrawerHeader(
                 child: Text('Settings'),
                 decoration: BoxDecoration(
-                  color: Colors.blueGrey,
+                  color: Colors.green,
                 ),
               ),
+                  ),
               ListTile(
                   title: Text('Logout'),
                   onTap: () {
