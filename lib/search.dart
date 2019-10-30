@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 
 //Class to represent search menu to add items to grocery list
@@ -81,9 +83,12 @@ class SearchListState extends State<SearchList> {
     setState(() {
       //clear current search list
       _searchList = new List<String>();
+      //add search string to top of list
       if (_searchString != "") {
         _searchList.insert(0, _searchString);
       }
+      //get database response and add values to the search list
+      _addRequest(_searchString);
       //clear text
       _textController.clear();
     });
@@ -137,5 +142,25 @@ class SearchListState extends State<SearchList> {
           widget.addCallback(itemName); //callback to parent to update parent grocery list
         }
       });
+  }
+
+  /*
+  Requests all items from the products database
+  that match the argument itemName
+  Then adds those items to the search list
+  */
+  void _addRequest(String itemName) async{
+    try{
+      var url = 'http://34.222.160.242:3000/Easygrocery/api/item/?item=' + itemName;
+      var response = await get(url);
+      var resp = json.decode(response.body); //decode json response
+      //resp is a list of hashmaps<string, dynamic>
+      resp.forEach(
+        (place) => _searchList.add(place['productName'].toString())
+      );
+    }
+    catch(exception){
+      print("An error occurred");
+    }
   }
 }
