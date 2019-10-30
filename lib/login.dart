@@ -134,7 +134,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
   }
   void register() {
     Navigator.push(context,
-    new MaterialPageRoute(builder: (context) => MyRegisterPage(title: 'EasyGrocery')),
+    new MaterialPageRoute(builder: (context) => MyRegisterPage(title: 'EasyGrocery', auth: widget.auth, onSignedIn: widget.onSignedIn))
     );
   }
 }
