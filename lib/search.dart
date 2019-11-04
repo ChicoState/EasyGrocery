@@ -151,16 +151,22 @@ class SearchListState extends State<SearchList> {
   */
   void _addRequest(String itemName) async{
     try{
+      print("Sending");
       var url = 'http://34.222.160.242:3000/Easygrocery/api/item/?item=' + itemName;
       var response = await get(url);
       var resp = json.decode(response.body); //decode json response
       //resp is a list of hashmaps<string, dynamic>
-      resp.forEach(
-        (place) => _searchList.add(place['productName'].toString())
-      );
+      for(var i = 0; i < resp.length; i++){
+        _searchList.add( resp[i]['productName'].toString());
+      }
     }
     catch(exception){
       print("An error occurred");
+    }
+    finally{
+      setState(() {
+        //do nothing
+      });
     }
   }
 }
