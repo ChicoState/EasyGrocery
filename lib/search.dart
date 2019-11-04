@@ -138,4 +138,30 @@ class SearchListState extends State<SearchList> {
         }
       });
   }
+
+  /*
+  Requests all items from the products database
+  that match the argument itemName
+  Then adds those items to the search list
+  */
+  void _addRequest(String itemName) async{
+    try{
+      print("Sending");
+      var url = 'http://34.222.160.242:3000/Easygrocery/api/item/?item=' + itemName;
+      var response = await get(url);
+      var resp = json.decode(response.body); //decode json response
+      //resp is a list of hashmaps<string, dynamic>
+      for(var i = 0; i < resp.length; i++){
+        _searchList.add( resp[i]['productName'].toString());
+      }
+    }
+    catch(exception){
+      print("An error occurred");
+    }
+    finally{
+      setState(() {
+        //do nothing
+      });
+    }
+  }
 }
