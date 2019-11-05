@@ -1,5 +1,6 @@
 import 'auth.dart';
 import 'list.dart';
+import 'prices.dart';
 import 'package:flutter/material.dart';
 import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
 import 'package:circular_bottom_navigation/tab_item.dart';
@@ -54,7 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final List<Widget> _pages = [
       HomeScreen(),
       GroceryList(auth: widget.auth),
-      PlaceHolderWidget(Colors.green)
+      Prices(auth: widget.auth,),
+      //PlaceHolderWidget(Colors.green)
     ];
     return Scaffold(
         //Used to open the drawer by affecting the state of the scaffold
