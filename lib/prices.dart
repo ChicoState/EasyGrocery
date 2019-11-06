@@ -11,6 +11,7 @@ class Prices extends StatefulWidget {
   PricesState createState() => PricesState();
 }
 
+//Class that stores a Grocery Store and its information
   class GroceryStores {
     var name = "";
     var address = "";
@@ -119,6 +120,7 @@ class PricesState extends State<Prices> {
         child: Column (
         children: <Widget>[
           new Container(
+            padding: EdgeInsets.only(top: 10),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
@@ -130,15 +132,88 @@ class PricesState extends State<Prices> {
           ),
           Container(
             child: MaterialButton(
-              child: Text('Compare'),
+              child: Text('Compare', style: TextStyle(color: Colors.white)),
               padding: EdgeInsets.only(left: 50, right: 50),
               shape: StadiumBorder(),
-              color: Colors.greenAccent,
-              onPressed: () {},
+              color: Colors.grey,
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => Compare(
+                          groceryStores: _groceryStores, auth: widget.auth)),
+                );
+              },
             )
           )
         ],
       ))
+    );
+  }
+}
+
+class Compare extends StatefulWidget {
+  Compare({this.auth, this.groceryStores});
+  final BaseAuth auth;
+  final List<GroceryStores> groceryStores;
+
+  @override
+  CompareState createState() => CompareState();
+}
+
+class CompareState extends State<Compare> {
+  //Firebase database reference
+  final dbRef = FirebaseDatabase.instance.reference();
+  //list to contain all items in the users grocery list
+  List<String> _groceryList = <String>[];
+  //List to store items from Firebase side
+  List<dynamic> items = [];
+  //User's UID
+  String uid = "";
+  //Grocery stores nearby
+  List<GroceryStores> _groceryStores = <GroceryStores> [
+  ];
+
+  //Initialize the state with variables
+  void initState() {
+    initializeVars();
+    super.initState();
+  }
+
+//Initialize variables UID and Item list
+  Future initializeVars() async {
+    uid = await widget.auth.currentUser();
+    await dbRef.child("$uid/items").once().then((DataSnapshot data) {
+      items = data.value;
+        if(items != null){
+          if (!mounted)
+            return;
+          setState(() {
+            var tempo = new List<String>.from(items.cast<String>().toList());
+            _groceryList = tempo;
+          });
+      }
+      else{
+        items = new List<String>();
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: Text(
+          "Price Comparison",
+          style: TextStyle(color: Colors.black),
+          ),
+        ),
+      body: SingleChildScrollView(
+        child: Column (
+        )
+      )
     );
   }
 }
