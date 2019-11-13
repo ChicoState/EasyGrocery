@@ -83,13 +83,11 @@ class SearchListState extends State<SearchList> {
     setState(() {
       //clear current search list
       _searchList = new List<String>();
-      //get database response and add values to the search list
-      _addRequest(_searchString);
+      //add search string to top of list
       if (_searchString != "") {
         _searchList.insert(0, _searchString);
       }
-      //get database response and add values to the search list	
-      _addRequest(_searchString);
+
       //clear text
       _textController.clear();
     });
