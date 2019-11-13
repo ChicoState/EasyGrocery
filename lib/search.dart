@@ -87,7 +87,7 @@ class SearchListState extends State<SearchList> {
       if (_searchString != "") {
         _searchList.insert(0, _searchString);
       }
-      //get database response and add values to the search list
+      //get database response and add values to the search list	
       _addRequest(_searchString);
       //clear text
       _textController.clear();
