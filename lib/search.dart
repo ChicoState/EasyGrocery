@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 
 //Class to represent search menu to add items to grocery list
@@ -81,9 +83,13 @@ class SearchListState extends State<SearchList> {
     setState(() {
       //clear current search list
       _searchList = new List<String>();
+      //get database response and add values to the search list
+      _addRequest(_searchString);
       if (_searchString != "") {
         _searchList.insert(0, _searchString);
       }
+      //get database response and add values to the search list	
+      _addRequest(_searchString);
       //clear text
       _textController.clear();
     });
