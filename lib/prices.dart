@@ -211,67 +211,57 @@ class CompareState extends State<Compare> {
           ),
         ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(top: 10),
         child: Row (
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Column(children: <Widget>[
-               Card( 
-                elevation: 2,
-                child: ClipPath(
-                child: Container(
-                child: Column(children: <Widget>[
-                  new Image.asset(
-                  'assets/walmart.jpg',
-                  width: 125.0,
-                  height: 125.0,
-                  fit: BoxFit.fill,
-                  ),
-                  Text("Price: \$20")
-                ],),
-                  height: 200,
-                  decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: Colors.green, width: 5),
-                    )),
-                ),
-              clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3))),
-               ),
-               )
+              showShops("walmart.jpg", 50)
             ],),
             Column(children: <Widget>[
-               Card( 
-                elevation: 2,
-                child: ClipPath(
-                child: Container(
-                child: Column(children: <Widget>[
-                  new Image.asset(
-                  'assets/safeway.png',
-                  width: 125.0,
-                  height: 125.0,
-                  fit: BoxFit.fill,
-                  ),
-                  Align(
-                    alignment: FractionalOffset.bottomCenter,
-                    child: Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Text("Price: \$20")
-                    )
-                  )
-                ],),
-                  height: 200,
-                  decoration: BoxDecoration(
-                  border: Border(
-                    right: BorderSide(color: Colors.green, width: 5),
-                    )),
-                ),
-              clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(3))),
-               ),
-               )
+              showShops("safeway.png", 200)
             ],)
           ],
         )
       )
     );
+  }
+
+/*
+* This function returns a card with a specific format for each store
+* and all is needed is the filename for the image
+*
+*/
+  Card showShops(String filename, int price) {
+        return Card( 
+        elevation: 2,
+        child: ClipPath(
+        child: Container(
+        child: Column(children: <Widget>[
+          new Image.asset(
+          'assets/$filename',
+          width: 125.0,
+          height: 125.0,
+          fit: BoxFit.fill,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Text("Price: \$$price")
+            ],
+            )
+        ],),
+          height: 200,
+          decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(color: Colors.green, width: 5),
+            )),
+        ),
+      clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(3))),
+        ),
+        );
   }
 }
