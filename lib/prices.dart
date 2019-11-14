@@ -211,7 +211,65 @@ class CompareState extends State<Compare> {
           ),
         ),
       body: SingleChildScrollView(
-        child: Column (
+        child: Row (
+          children: <Widget>[
+            Column(children: <Widget>[
+               Card( 
+                elevation: 2,
+                child: ClipPath(
+                child: Container(
+                child: Column(children: <Widget>[
+                  new Image.asset(
+                  'assets/walmart.jpg',
+                  width: 125.0,
+                  height: 125.0,
+                  fit: BoxFit.fill,
+                  ),
+                  Text("Price: \$20")
+                ],),
+                  height: 200,
+                  decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: Colors.green, width: 5),
+                    )),
+                ),
+              clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3))),
+               ),
+               )
+            ],),
+            Column(children: <Widget>[
+               Card( 
+                elevation: 2,
+                child: ClipPath(
+                child: Container(
+                child: Column(children: <Widget>[
+                  new Image.asset(
+                  'assets/safeway.png',
+                  width: 125.0,
+                  height: 125.0,
+                  fit: BoxFit.fill,
+                  ),
+                  Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 10.0),
+                      child: Text("Price: \$20")
+                    )
+                  )
+                ],),
+                  height: 200,
+                  decoration: BoxDecoration(
+                  border: Border(
+                    right: BorderSide(color: Colors.green, width: 5),
+                    )),
+                ),
+              clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(3))),
+               ),
+               )
+            ],)
+          ],
         )
       )
     );
