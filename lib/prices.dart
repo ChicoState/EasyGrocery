@@ -211,9 +211,58 @@ class CompareState extends State<Compare> {
           ),
         ),
       body: SingleChildScrollView(
-        child: Column (
+        padding: EdgeInsets.only(top: 10),
+        child: Row (
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Column(children: <Widget>[
+              showShops("walmart.jpg", 50, 125, 115)
+            ],),
+            Column(children: <Widget>[
+              showShops("safeway.png", 200, 125, 125)
+            ],)
+          ],
         )
       )
     );
+  }
+
+/*
+* This function returns a card with a specific format for each store
+* and all is needed is the filename and dimensions for the image
+*
+*/
+  Card showShops(String filename, int price, int width, int height) {
+        return Card( 
+        elevation: 2,
+        child: ClipPath(
+        child: Container(
+        child: Column(children: <Widget>[
+          new Image.asset(
+          'assets/$filename',
+          width: width.toDouble(),
+          height: height.toDouble(),
+          fit: BoxFit.fill,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text("Price: \$$price")
+            ],
+            )
+        ],),
+          height: 200,
+          width: 125,
+          decoration: BoxDecoration(
+          border: Border(
+            right: BorderSide(color: Colors.green, width: 5),
+            )),
+        ),
+      clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(3))),
+        ),
+        );
   }
 }
