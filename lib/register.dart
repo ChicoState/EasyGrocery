@@ -11,9 +11,11 @@
 
 
   class MyRegisterPage extends StatefulWidget {
-  MyRegisterPage({Key key, this.title, this.auth}) : super(key: key);
+  MyRegisterPage({Key key, this.title, this.auth, this.onSignedIn()}) : super(key: key);
   final BaseAuth auth;
   final String title;
+  final VoidCallback onSignedIn;
+
 
   @override
   _MyRegisterPageState createState() => _MyRegisterPageState();
@@ -184,14 +186,16 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
       //final BaseAuth auth = AuthProvider.of(context).auth;
       final String userId = await widget.auth.createUserWithEmailAndPassword(_email, _password);
           print('Registered user: $userId');
+      
       //WIP
       //dbRef.child('$userId').set({
       //  'first name': _fname,
       //});
-
-      Navigator.push(context,
-      new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
-      );
+      widget.onSignedIn();
+      Navigator.pop(context);
+      //Navigator.push(context,
+      //new MaterialPageRoute(builder: (context) => MyHomePage(title: 'EasyGrocery')),
+      //);
       } catch (e) {
         print(e.message);
       }
