@@ -216,10 +216,10 @@ class CompareState extends State<Compare> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Column(children: <Widget>[
-              showShops("walmart.jpg", 50)
+              showShops("walmart.jpg", 50, 125, 115)
             ],),
             Column(children: <Widget>[
-              showShops("safeway.png", 200)
+              showShops("safeway.png", 200, 125, 125)
             ],)
           ],
         )
@@ -229,10 +229,10 @@ class CompareState extends State<Compare> {
 
 /*
 * This function returns a card with a specific format for each store
-* and all is needed is the filename for the image
+* and all is needed is the filename and dimensions for the image
 *
 */
-  Card showShops(String filename, int price) {
+  Card showShops(String filename, int price, int width, int height) {
         return Card( 
         elevation: 2,
         child: ClipPath(
@@ -240,20 +240,21 @@ class CompareState extends State<Compare> {
         child: Column(children: <Widget>[
           new Image.asset(
           'assets/$filename',
-          width: 125.0,
-          height: 125.0,
+          width: width.toDouble(),
+          height: height.toDouble(),
           fit: BoxFit.fill,
           ),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("Price: \$$price")
             ],
             )
         ],),
           height: 200,
+          width: 125,
           decoration: BoxDecoration(
           border: Border(
             right: BorderSide(color: Colors.green, width: 5),
