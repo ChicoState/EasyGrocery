@@ -15,9 +15,16 @@ class Prices extends StatefulWidget {
   class GroceryStores {
     var name = "";
     var address = "";
+    var filename = "";
+
+    int width = 0;
+    int height = 0;
+
     var selected = true;
 
-    GroceryStores(this.name, this.address);
+    GroceryStores(
+      this.name, this.address, this.filename, this.width, this.height
+      );
   }
 
   //Checks if the address is currently selected
@@ -27,6 +34,10 @@ class Prices extends StatefulWidget {
   //Grabs the current Grocery store's name
   String namecheck(int index, List<GroceryStores> list) {
     return list[index].name;
+  }
+  //Grabs the current Grocery store's name
+  String filecheck(int index, List<GroceryStores> list) {
+    return list[index].filename;
   }
   //Grabs the current Grocery store's address
   String addresscheck(int index, List<GroceryStores> list) {
@@ -47,8 +58,10 @@ class PricesState extends State<Prices> {
   ];
 
   //Create static locations for now
-  GroceryStores _walmart = new GroceryStores("Walmart", "2044 Forest Ave.");
-  GroceryStores _safeway = new GroceryStores("Safeway", "Chico Placeholder");
+  GroceryStores _walmart = 
+   new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.jpg", 125, 115);
+  GroceryStores _safeway =
+   new GroceryStores("Safeway", "Chico Placeholder", "safeway.png", 125, 125);
 
   //Calls this to initialize the above two variables
   void initState() {
@@ -215,11 +228,23 @@ class CompareState extends State<Compare> {
         child: Row (
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Column(children: <Widget>[
+           /* Column(children: <Widget>[
               showShops("walmart.jpg", 50, 125, 115)
             ],),
             Column(children: <Widget>[
               showShops("safeway.png", 200, 125, 125)
+            ],),*/
+            Column(children: <Widget>[
+            ListView.builder(
+              itemCount: _groceryStores.length,
+              itemBuilder: (BuildContext context, int index) {
+                return showShops(
+                  _groceryStores[index].filename, 
+                  150, 
+                  _groceryStores[index].width, 
+                  _groceryStores[index].height);
+              },
+            ) 
             ],)
           ],
         )
@@ -244,6 +269,7 @@ class CompareState extends State<Compare> {
           height: height.toDouble(),
           fit: BoxFit.fill,
           ),
+          Padding(padding: EdgeInsets.only(top: 180-height.toDouble()),),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
