@@ -93,7 +93,7 @@ class PricesState extends State<Prices> {
 
   //Create static locations for now
   GroceryStores _walmart = 
-   new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.jpg", 125, 115);
+   new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.png", 125, 115);
   GroceryStores _safeway =
    new GroceryStores("Safeway", "Chico Placeholder", "safeway.png", 125, 125);
 
@@ -301,6 +301,8 @@ class CompareState extends State<Compare> {
           Column(children: <Widget>[
             Card( 
             elevation: 2,
+            child: InkWell(
+            onTap: () {},
             child: ClipPath(
             child: Container(
             child: Column(children: <Widget>[
@@ -330,6 +332,6 @@ class CompareState extends State<Compare> {
           clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(3))),
             ),
-          )])]);
+        ))])]);
   }
 }
