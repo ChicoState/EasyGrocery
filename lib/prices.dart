@@ -44,6 +44,40 @@ class Prices extends StatefulWidget {
     return list[index].address;
   }
 
+  //Check to see if there are enough stores selected
+  bool checkEnough(List<GroceryStores> list) {
+    int count = 0;
+    for (int i=0; i<list.length; i++) {
+      if (list[i].selected)
+        count++;
+    }
+    return(count>=2);
+  }
+
+  //Dialog to alert if not enough stores are selected
+  Future alertForStores(BuildContext context) {
+    return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Select at least two stores to compare prices.'),
+        content: const Text('This feature is intended for when there are more than two stores.'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Okay",
+              style: TextStyle(color: Colors.black),
+              ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
+
 class PricesState extends State<Prices> {
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
@@ -147,14 +181,19 @@ class PricesState extends State<Prices> {
             child: MaterialButton(
               child: Text('Compare', style: TextStyle(color: Colors.white)),
               padding: EdgeInsets.only(left: 50, right: 50),
-              shape: StadiumBorder(),
-              color: Colors.grey,
+              shape: StadiumBorder(side: BorderSide(color: Colors.black)),
+              color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => Compare(
-                          groceryStores: _groceryStores, auth: widget.auth)),
-                );
+                if (checkEnough(_groceryStores)) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => Compare(
+                            groceryStores: _groceryStores, auth: widget.auth)),
+                  );
+                }
+                else {
+                  alertForStores(context);
+                }
               },
             )
           )
@@ -229,17 +268,14 @@ class CompareState extends State<Compare> {
         SizedBox(
           height: 220,
           child:
-        ListView.separated(
+        ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               itemCount: widget.groceryStores.length,
-              separatorBuilder: (BuildContext context, int index) => Divider(
-                indent: 30,
+              itemBuilder: (BuildContext context, int index) => Padding (
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: showShops(index),
               ),
-              itemBuilder: (BuildContext context, int index) {
-                print("Length: " + widget.groceryStores.length.toString());
-                return showShops(index);
-              },
             ) ), ]),
         )
     );
@@ -257,11 +293,7 @@ class CompareState extends State<Compare> {
         int width = store.width;
         int height = store.height;
         int price = 200;
-        print(index);
-        print(store.name);
-        print(store.selected);
-        if (store.selected) {
-          return 
+        return
         Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -298,7 +330,6 @@ class CompareState extends State<Compare> {
           clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(3))),
             ),
-          )])]);}
-          else {return null;}
+          )])]);
   }
 }
