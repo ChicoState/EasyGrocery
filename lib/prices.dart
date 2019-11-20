@@ -15,9 +15,16 @@ class Prices extends StatefulWidget {
   class GroceryStores {
     var name = "";
     var address = "";
+    var filename = "";
+
+    int width = 0;
+    int height = 0;
+
     var selected = true;
 
-    GroceryStores(this.name, this.address);
+    GroceryStores(
+      this.name, this.address, this.filename, this.width, this.height
+      );
   }
 
   //Checks if the address is currently selected
@@ -28,9 +35,47 @@ class Prices extends StatefulWidget {
   String namecheck(int index, List<GroceryStores> list) {
     return list[index].name;
   }
+  //Grabs the current Grocery store's name
+  String filecheck(int index, List<GroceryStores> list) {
+    return list[index].filename;
+  }
   //Grabs the current Grocery store's address
   String addresscheck(int index, List<GroceryStores> list) {
     return list[index].address;
+  }
+
+  //Check to see if there are enough stores selected
+  bool checkEnough(List<GroceryStores> list) {
+    int count = 0;
+    for (int i=0; i<list.length; i++) {
+      if (list[i].selected)
+        count++;
+    }
+    return(count>=2);
+  }
+
+  //Dialog to alert if not enough stores are selected
+  Future alertForStores(BuildContext context) {
+    return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Select at least two stores to compare prices.'),
+        content: const Text('This feature is intended for when there are more than two stores.'),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Okay",
+              style: TextStyle(color: Colors.black),
+              ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
   }
 
 class PricesState extends State<Prices> {
@@ -47,8 +92,10 @@ class PricesState extends State<Prices> {
   ];
 
   //Create static locations for now
-  GroceryStores _walmart = new GroceryStores("Walmart", "2044 Forest Ave.");
-  GroceryStores _safeway = new GroceryStores("Safeway", "Chico Placeholder");
+  GroceryStores _walmart = 
+   new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.jpg", 125, 115);
+  GroceryStores _safeway =
+   new GroceryStores("Safeway", "Chico Placeholder", "safeway.png", 125, 125);
 
   //Calls this to initialize the above two variables
   void initState() {
@@ -134,14 +181,19 @@ class PricesState extends State<Prices> {
             child: MaterialButton(
               child: Text('Compare', style: TextStyle(color: Colors.white)),
               padding: EdgeInsets.only(left: 50, right: 50),
-              shape: StadiumBorder(),
-              color: Colors.grey,
+              shape: StadiumBorder(side: BorderSide(color: Colors.black)),
+              color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => Compare(
-                          groceryStores: _groceryStores, auth: widget.auth)),
-                );
+                if (checkEnough(_groceryStores)) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => Compare(
+                            groceryStores: _groceryStores, auth: widget.auth)),
+                  );
+                }
+                else {
+                  alertForStores(context);
+                }
               },
             )
           )
@@ -169,9 +221,6 @@ class CompareState extends State<Compare> {
   List<dynamic> items = [];
   //User's UID
   String uid = "";
-  //Grocery stores nearby
-  List<GroceryStores> _groceryStores = <GroceryStores> [
-  ];
 
   //Initialize the state with variables
   void initState() {
@@ -212,18 +261,23 @@ class CompareState extends State<Compare> {
         ),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 10),
-        child: Row (
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Column(children: <Widget>[
-              showShops("walmart.jpg", 50, 125, 115)
-            ],),
-            Column(children: <Widget>[
-              showShops("safeway.png", 200, 125, 125)
-            ],)
-          ],
+        child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+        SizedBox(
+          height: 220,
+          child:
+        ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.groceryStores.length,
+              itemBuilder: (BuildContext context, int index) => Padding (
+                padding: EdgeInsets.only(left: 20, right: 20),
+                child: showShops(index),
+              ),
+            ) ), ]),
         )
-      )
     );
   }
 
@@ -232,37 +286,50 @@ class CompareState extends State<Compare> {
 * and all is needed is the filename and dimensions for the image
 *
 */
-  Card showShops(String filename, int price, int width, int height) {
-        return Card( 
-        elevation: 2,
-        child: ClipPath(
-        child: Container(
-        child: Column(children: <Widget>[
-          new Image.asset(
-          'assets/$filename',
-          width: width.toDouble(),
-          height: height.toDouble(),
-          fit: BoxFit.fill,
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Price: \$$price")
-            ],
-            )
-        ],),
-          height: 200,
-          width: 125,
-          decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(color: Colors.green, width: 5),
-            )),
-        ),
-      clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(3))),
-        ),
-        );
+  Row showShops(int index) {
+    //Initiliaze shop variables
+        GroceryStores store = widget.groceryStores[index];
+        String filename = store.filename;
+        int width = store.width;
+        int height = store.height;
+        int price = 200;
+        return
+        Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[
+          Column(children: <Widget>[
+            Card( 
+            elevation: 2,
+            child: ClipPath(
+            child: Container(
+            child: Column(children: <Widget>[
+              new Image.asset(
+              'assets/$filename',
+              width: width.toDouble(),
+              height: height.toDouble(),
+              fit: BoxFit.fill,
+              ),
+              Padding(padding: EdgeInsets.only(top: 180-height.toDouble()),),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text("Price: \$$price")
+                ],
+                )
+            ],),
+              height: 200,
+              width: 125,
+              decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(color: Colors.green, width: 5),
+                )),
+            ),
+          clipper: ShapeBorderClipper(shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(3))),
+            ),
+          )])]);
   }
 }
