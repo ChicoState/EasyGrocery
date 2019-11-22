@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth.dart';
+import 'shoplist.dart';
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
 
@@ -302,7 +303,13 @@ class CompareState extends State<Compare> {
             Card( 
             elevation: 2,
             child: InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => Shoplist(
+                        store: store, auth: widget.auth)),
+              );
+            },
             child: ClipPath(
             child: Container(
             child: Column(children: <Widget>[
