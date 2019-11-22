@@ -14,6 +14,17 @@ class Shoplist extends StatefulWidget {
   ShoplistState createState() => ShoplistState();
 }
 
+//Class that stores a item and its information
+  class Items {
+    var name = "";
+    var price = 0.0;
+    var selected = false;
+
+    Items(
+      this.name, this.price
+      );
+  }
+
 class ShoplistState extends State<Shoplist> {
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
@@ -25,12 +36,12 @@ class ShoplistState extends State<Shoplist> {
   String uid = "";
 
   //Temporary list of static items with their prices
-  var itemList = {
-    "Nesquick Chocolate Milk": 2.50,
-    "Cheez-it, family size": 5.25,
-    "Dozen Eggs": 3.99,
-    "Sourdough bread": 6.99,
-  };
+  List<Items> itemlist = [
+    Items("Nesquick Chocolate Milk", 2.50),
+    Items("Cheez-it, family size", 5.25),
+    Items("Dozen Eggs", 3.99),
+    Items("Sourdough bread", 6.99),
+  ];
 
   //Calls this to initialize the Firebase variables with user list
   void initState() {
@@ -38,27 +49,32 @@ class ShoplistState extends State<Shoplist> {
     super.initState();
   }
 
+
+
   //Card for each item in the groceryList
-  Card makeTile(int index) {
-    bool toggle = true;
-    var keys = itemList.keys.toList();
-    var itemName = keys[index];
+  Card makeItem(int index) {
+    var itemName = itemlist[index].name;
+    var price = itemlist[index].price;
     return Card(
     elevation: 8,
     margin: new EdgeInsets.symmetric(horizontal: 10, vertical: 6),
     child: InkWell(
     onTap: () {
-    },
+      print("blah");
+      setState(() {
+        itemlist[index].selected = !itemlist[index].selected;
+      });
+    }, 
     child: Container(
-      decoration: BoxDecoration(color: toggle ? Colors.green: Colors.grey),
+      decoration: BoxDecoration(color: itemlist[index].selected ? Colors.green: Colors.grey),
       child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 3),
         leading: Container(
-          padding: EdgeInsets.only(right: 12.0),
+          padding: EdgeInsets.only(right: 12.0, top: 8),
           decoration: new BoxDecoration(
             border: new Border(
-              right: new BorderSide(width: 1.0, color: Colors.green))),
-              child: Icon(toggle ? (Icons.check_box) :(Icons.check_box_outline_blank), color: Colors.white,),
+              right: new BorderSide(width: 1, color: itemlist[index].selected ? Colors.green: Colors.grey))),
+              child: Icon(itemlist[index].selected ? (Icons.check_box) :(Icons.check_box_outline_blank), color: Colors.white,),
             ),
             title: Text(
               itemName,
@@ -66,9 +82,16 @@ class ShoplistState extends State<Shoplist> {
             ),
             subtitle: Row(children: <Widget>[
               Icon(Icons.attach_money, color: Colors.white),
-              Text(" \$" + itemList[itemName].toString(), style: TextStyle(color: Colors.white))
+              Text(" " + price.toStringAsFixed(2), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
             ],),
-            trailing: Icon(Icons.date_range, color: Colors.white),
+            trailing: itemlist[index].selected ? 
+              Icon(Icons.date_range, color: Colors.white):
+              Icon(Icons.date_range, color: Colors.grey),
+              /*onTap: (){
+                if (toggle) {
+                  print("Run calendar button");
+                }
+              },*/
       ),
     ),
   ));
@@ -96,17 +119,26 @@ class ShoplistState extends State<Shoplist> {
 //Create widget that will contain a shopping list
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: BackButton(color: Colors.black),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: Text(
+          "Your Grocery List",
+          style: TextStyle(color: Colors.black),
+          ),
+        ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            new Container(
+            Container(
               padding: EdgeInsets.only(top: 10),
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: itemList.length,
+                itemCount: itemlist.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return makeTile(index);
+                  return makeItem(index);
               },
             ) 
           ),
