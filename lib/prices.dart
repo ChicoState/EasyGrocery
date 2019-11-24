@@ -254,18 +254,6 @@ class CompareState extends State<Compare> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     /*appBar: AppBar(
-        leading: BackButton(
-          color: Colors.black,
-        ),
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.white,
-        elevation: 2,
-        title: Text(
-          "Price Comparison",
-          style: TextStyle(color: Colors.black),
-          ),
-        ), */
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 10),
         child: Column(children: <Widget>[
@@ -316,13 +304,6 @@ class CompareState extends State<Compare> {
         //Adds Navigation bar to the bottom of the app screen
     );
   }
-
-          /*new Row(children: <Widget>[
-            MaterialButton(
-              child: Text('Reset'),
-              onPressed: widget.reset,
-            )
-          ],) */
 
 /*
 * This function returns a card with a specific format for each store

@@ -90,20 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     );
 
-    /*final List<Widget> _pages = [
-      HomeScreen(),
-      GroceryList(auth: widget.auth),
-      Prices(auth: widget.auth,
-      //Add callback to overwrite the body widget
-      callback: (Widget y) {
-        setState(() {
-          checkWidget = true;
-          newWidget = y;
-        });
-      },
-      ),
-      //PlaceHolderWidget(Colors.green)
-    ]; */
     return Scaffold(
         //Used to open the drawer by affecting the state of the scaffold
         key: _drawerKey,
