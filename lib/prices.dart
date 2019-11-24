@@ -6,9 +6,10 @@ import 'home_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Prices extends StatefulWidget {
-  Prices({this.auth, this.callback});
+  Prices({this.auth, this.callback, this.reset()});
   final BaseAuth auth;
   final Function(Widget) callback;
+  final VoidCallback reset;
 
   @override
   PricesState createState() => PricesState();
@@ -188,19 +189,17 @@ class PricesState extends State<Prices> {
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
                 if (checkEnough(_groceryStores)) {
-                  widget.callback(Compare(groceryStores: _groceryStores, auth: widget.auth,));
-                  /*Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (context) => Compare(
-                            groceryStores: _groceryStores, auth: widget.auth)),
-                  ); */
+                  widget.callback(Compare(groceryStores: _groceryStores, auth: widget.auth, reset: (){
+                    widget.reset();
+                  },
+                  ));
                 }
                 else {
                   alertForStores(context);
                 }
               },
             )
-          )
+          ),
         ],
       ))
     );
@@ -208,9 +207,10 @@ class PricesState extends State<Prices> {
 }
 
 class Compare extends StatefulWidget {
-  Compare({this.auth, this.groceryStores});
+  Compare({this.auth, this.groceryStores, this.reset()});
   final BaseAuth auth;
   final List<GroceryStores> groceryStores;
+  final VoidCallback reset;
 
   @override
   CompareState createState() => CompareState();
@@ -268,7 +268,8 @@ class CompareState extends State<Compare> {
         ), */
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 10),
-        child: Row(
+        child: Column(children: <Widget>[
+        Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
@@ -283,11 +284,45 @@ class CompareState extends State<Compare> {
                 padding: EdgeInsets.only(left: 20, right: 20),
                 child: showShops(index),
               ),
-            ) ), ]),
+            ) ), ]
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Padding(padding: EdgeInsets.only(left:8, right: 8),),
+                Expanded( child:Text("Click on one of the stores to show your shopping list!" +
+                " Click the button below to reselect the stores you've chosen."))
+            ],),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              MaterialButton(
+                child: Text('Reset Selection', style: TextStyle(fontSize: 14),),
+                color: Colors.green,
+                textColor: Colors.white,
+                shape: StadiumBorder(side: BorderSide(color: Colors.black)),
+                padding: EdgeInsets.only(left: 50, right: 50),
+                onPressed: () {
+                  widget.reset();
+                  },
+            )
+          ],),
+          //Adds a row with text to instruct user
+            ]
+            )
         ),
         //Adds Navigation bar to the bottom of the app screen
     );
   }
+
+          /*new Row(children: <Widget>[
+            MaterialButton(
+              child: Text('Reset'),
+              onPressed: widget.reset,
+            )
+          ],) */
 
 /*
 * This function returns a card with a specific format for each store

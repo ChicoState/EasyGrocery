@@ -27,7 +27,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  //Initiate list of pages to display to the body
   final List<Widget> _pages = new List(4);
+
+  //Function to check if previously compared and added
+  //new page so you don't have to keep clicking compare
+  bool checkCompare(int index) {
+    if (_pages[3]==null || index != 2)
+      return true;
+    else
+      return false;
+  }
 
 
   //Boolean to re-render the page
@@ -66,14 +76,18 @@ class _MyHomePageState extends State<MyHomePage> {
       callback: (newPage) {
         //Replace page with widget so bottom appbar remains
         setState(() {
-         // _pages[2] = y;
-//          _pages.insert(2, y);
           _pages[3] = newPage;
           _currentIndex = 3;
-         // _navigationController.value = 2;
         });
-        print(_pages.length);
       },
+      reset: () {
+        try {
+          setState(() {
+            _pages[3] = null;
+            _currentIndex = 2;
+          });
+        } catch (e) { print(e);}
+      }
     );
 
     /*final List<Widget> _pages = [
@@ -148,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ])),
 
         //body
-        body: _pages[_currentIndex],
+        body: checkCompare(_currentIndex) ? _pages[_currentIndex]: _pages[3],
 
         //Adds Navigation bar to the bottom of the app screen
         bottomNavigationBar: CircularBottomNavigation(
