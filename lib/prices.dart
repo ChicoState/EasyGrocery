@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'auth.dart';
 import 'shoplist.dart';
+import 'home_page.dart';
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
 
 class Prices extends StatefulWidget {
-  Prices({this.auth});
+  Prices({this.auth, this.callback});
   final BaseAuth auth;
+  final Function(Widget) callback;
 
   @override
   PricesState createState() => PricesState();
@@ -186,11 +188,12 @@ class PricesState extends State<Prices> {
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
                 if (checkEnough(_groceryStores)) {
-                  Navigator.of(context).push(
+                  widget.callback(Compare(groceryStores: _groceryStores, auth: widget.auth,));
+                  /*Navigator.of(context).push(
                     MaterialPageRoute(
                         builder: (context) => Compare(
                             groceryStores: _groceryStores, auth: widget.auth)),
-                  );
+                  ); */
                 }
                 else {
                   alertForStores(context);
@@ -251,15 +254,18 @@ class CompareState extends State<Compare> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(color: Colors.black),
+     /*appBar: AppBar(
+        leading: BackButton(
+          color: Colors.black,
+        ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
+        elevation: 2,
         title: Text(
           "Price Comparison",
           style: TextStyle(color: Colors.black),
           ),
-        ),
+        ), */
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: 10),
         child: Row(
@@ -278,7 +284,8 @@ class CompareState extends State<Compare> {
                 child: showShops(index),
               ),
             ) ), ]),
-        )
+        ),
+        //Adds Navigation bar to the bottom of the app screen
     );
   }
 

@@ -27,6 +27,12 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  final List<Widget> _pages = new List(4);
+
+
+  //Boolean to re-render the page
+  bool rerender = false;
+
   //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex = 0;
@@ -52,12 +58,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
+    //_pages.add(HomeScreen());
+    _pages[0] = HomeScreen();
+    //_pages.add(GroceryList(auth: widget.auth));
+    _pages[1] = GroceryList(auth: widget.auth);
+    _pages[2] = Prices(auth: widget.auth,
+      callback: (newPage) {
+        //Replace page with widget so bottom appbar remains
+        setState(() {
+         // _pages[2] = y;
+//          _pages.insert(2, y);
+          _pages[3] = newPage;
+          _currentIndex = 3;
+         // _navigationController.value = 2;
+        });
+        print(_pages.length);
+      },
+    );
+
+    /*final List<Widget> _pages = [
       HomeScreen(),
       GroceryList(auth: widget.auth),
-      Prices(auth: widget.auth,),
+      Prices(auth: widget.auth,
+      //Add callback to overwrite the body widget
+      callback: (Widget y) {
+        setState(() {
+          checkWidget = true;
+          newWidget = y;
+        });
+      },
+      ),
       //PlaceHolderWidget(Colors.green)
-    ];
+    ]; */
     return Scaffold(
         //Used to open the drawer by affecting the state of the scaffold
         key: _drawerKey,

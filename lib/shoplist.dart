@@ -49,6 +49,32 @@ class ShoplistState extends State<Shoplist> {
     super.initState();
   }
 
+  Future expireDateNotify(BuildContext context) {
+    return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Enter an expiration date so we can remind you'),
+        content: const TextField(
+            decoration: InputDecoration(
+              labelText: 'Enter date: (ex: 04-10-2019)',
+            )
+          ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Okay",
+              style: TextStyle(color: Colors.black),
+              ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+  }
 
 
   //Card for each item in the groceryList
@@ -58,13 +84,6 @@ class ShoplistState extends State<Shoplist> {
     return Card(
     elevation: 8,
     margin: new EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-    child: InkWell(
-    onTap: () {
-      print("blah");
-      setState(() {
-        itemlist[index].selected = !itemlist[index].selected;
-      });
-    }, 
     child: Container(
       decoration: BoxDecoration(color: itemlist[index].selected ? Colors.green: Colors.grey),
       child: ListTile(
@@ -84,17 +103,30 @@ class ShoplistState extends State<Shoplist> {
               Icon(Icons.attach_money, color: Colors.white),
               Text(" " + price.toStringAsFixed(2), style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold))
             ],),
-            trailing: itemlist[index].selected ? 
+            trailing: new Column(children: <Widget>[
+              new Container(
+                child: new IconButton(
+                  icon: Icon(Icons.date_range, 
+                  color: itemlist[index].selected ? Colors.white: Colors.grey),
+                  onPressed: (){
+                    //Run notifcation button
+                    if (itemlist[index].selected)
+                      expireDateNotify(context);
+                  },)
+              )
+            ],
+            ),
+            /*itemlist[index].selected ? 
               Icon(Icons.date_range, color: Colors.white):
-              Icon(Icons.date_range, color: Colors.grey),
-              /*onTap: (){
-                if (toggle) {
-                  print("Run calendar button");
-                }
-              },*/
+              Icon(Icons.date_range, color: Colors.grey),*/
+              onTap: (){
+                setState(() {
+                  itemlist[index].selected = !itemlist[index].selected;
+                });
+              },
       ),
     ),
-  ));
+  );
   }
 
 //Initialize variables UID and Item list
