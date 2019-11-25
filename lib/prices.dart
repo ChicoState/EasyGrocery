@@ -5,11 +5,13 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart';
 
 class Prices extends StatefulWidget {
-  Prices({this.auth});
+  Prices({this.auth, this.groceryList});
   final BaseAuth auth;
+  final List<String> groceryList; //grocery list passed from parent widget
+
 
   @override
-  PricesState createState() => PricesState();
+  PricesState createState() => PricesState(this.groceryList);
 }
 
 //Class that stores a Grocery Store and its information
@@ -80,18 +82,19 @@ class Prices extends StatefulWidget {
   }
 
 class PricesState extends State<Prices> {
+  //constructor to pass in grocerylist
+  PricesState(this._groceryList);
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
   //list to contain all items in the users grocery list
-  List<String> _groceryList = <String>[];
+  List<String> _groceryList;
   //List to store items from Firebase side
   List<dynamic> items = [];
   //User's UID
   String uid = "";
   //Grocery stores nearby
-  List<GroceryStores> _groceryStores = <GroceryStores> [
-  ];
-
+  List<GroceryStores> _groceryStores = <GroceryStores>[];
+  
   //Create static locations for now
   GroceryStores _walmart = 
    new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.png", 125, 115);
@@ -185,7 +188,7 @@ class PricesState extends State<Prices> {
               shape: StadiumBorder(side: BorderSide(color: Colors.black)),
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
-
+                priceCompare();
                 if (checkEnough(_groceryStores)) {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -206,11 +209,15 @@ class PricesState extends State<Prices> {
 
   String encodeListAsJson(){
     String jsonlist = "";
+    int lastIndex = _groceryList.length-1;
     jsonlist += '['; //add opening brace
     for(String item in _groceryList){
       jsonlist += "{\"itemname\":\"";
       jsonlist += item;
-      jsonlist += "\"},";
+      jsonlist += "\"}";
+      if(item != _groceryList[lastIndex]){
+        jsonlist +=", ";
+      }
     }
     jsonlist += ']'; //add closing brace
     
