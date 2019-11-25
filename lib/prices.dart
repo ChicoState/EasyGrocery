@@ -205,7 +205,16 @@ class PricesState extends State<Prices> {
   }
 
   String encodeListAsJson(){
-    return "";
+    String jsonlist = "";
+    jsonlist += '['; //add opening brace
+    for(String item in _groceryList){
+      jsonlist += "{\"itemname\":\"";
+      jsonlist += item;
+      jsonlist += "\"},";
+    }
+    jsonlist += ']'; //add closing brace
+    
+    return jsonlist;
   }
 
   void priceCompare() async{
