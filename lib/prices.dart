@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'auth.dart';
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
+import 'package:http/http.dart';
 
 class Prices extends StatefulWidget {
   Prices({this.auth});
@@ -137,6 +138,7 @@ class PricesState extends State<Prices> {
               shape: StadiumBorder(),
               color: Colors.grey,
               onPressed: () {
+                priceCompare();
                 Navigator.of(context).push(
                   MaterialPageRoute(
                       builder: (context) => Compare(
@@ -149,6 +151,20 @@ class PricesState extends State<Prices> {
       ))
     );
   }
+
+  String encodeListAsJson(){
+
+    return "";
+  }
+
+  void priceCompare() async{
+    Map<String, String> headers = {"Content-type": "application/json"};
+    var url = 'http://34.222.160.242:3000/Easygrocery/api/compare';
+    var json = encodeListAsJson();
+    var response = await post(url, headers: headers, body: json);
+    print(response.body);
+  }
+
 }
 
 class Compare extends StatefulWidget {
