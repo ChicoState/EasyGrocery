@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'auth.dart';
 import 'shoplist.dart';
-import 'home_page.dart';
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
 
@@ -140,7 +139,9 @@ class PricesState extends State<Prices> {
       });
     },
     child: Container(
-      decoration: BoxDecoration(color: check(index, _groceryStores) ? Colors.green: Colors.grey),
+      decoration: BoxDecoration(color: check(index, _groceryStores) ? Colors.green: Colors.grey,
+      border: Border.all(width: 1, color: Colors.black),
+      ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         leading: Container(
@@ -188,13 +189,14 @@ class PricesState extends State<Prices> {
               shape: StadiumBorder(side: BorderSide(color: Colors.black)),
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
+                //Checks if enough stores were selected
                 if (checkEnough(_groceryStores)) {
                   widget.callback(Compare(groceryStores: _groceryStores, auth: widget.auth, reset: (){
                     widget.reset();
                   },
                   ));
                 }
-                else {
+                else { //Sends alert notifying that not enough stores were selected
                   alertForStores(context);
                 }
               },
@@ -264,6 +266,8 @@ class CompareState extends State<Compare> {
         SizedBox(
           height: 220,
           child:
+      //Builds shop cards with their pictures and total cost for 
+      //each store
         ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,

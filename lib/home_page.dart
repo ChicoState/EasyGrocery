@@ -80,6 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _currentIndex = 3;
         });
       },
+      //Replace page with price widget upon clicking reset
       reset: () {
         try {
           setState(() {
