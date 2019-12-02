@@ -27,6 +27,22 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  //Initiate list of pages to display to the body
+  final List<Widget> _pages = new List(4);
+
+  //Function to check if previously compared and added
+  //new page so you don't have to keep clicking compare
+  bool checkCompare(int index) {
+    if (_pages[3]==null || index != 2)
+      return true;
+    else
+      return false;
+  }
+
+
+  //Boolean to re-render the page
+  bool rerender = false;
+
   //String uid = widget.auth.currentUser().toString();
   final GlobalKey<ScaffoldState> _drawerKey = new GlobalKey<ScaffoldState>();
   static int _currentIndex = 0;
@@ -52,12 +68,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _pages = [
-      HomeScreen(),
-      GroceryList(auth: widget.auth),
-      Prices(auth: widget.auth,),
-      //PlaceHolderWidget(Colors.green)
-    ];
+    //_pages.add(HomeScreen());
+    _pages[0] = HomeScreen();
+    //_pages.add(GroceryList(auth: widget.auth));
+    _pages[1] = GroceryList(auth: widget.auth);
+    _pages[2] = Prices(auth: widget.auth,
+      callback: (newPage) {
+        //Replace page with widget so bottom appbar remains
+        setState(() {
+          _pages[3] = newPage;
+          _currentIndex = 3;
+        });
+      },
+      //Replace page with price widget upon clicking reset
+      reset: () {
+        try {
+          setState(() {
+            _pages[3] = null;
+            _currentIndex = 2;
+          });
+        } catch (e) { print(e);}
+      }
+    );
+
     return Scaffold(
         //Used to open the drawer by affecting the state of the scaffold
         key: _drawerKey,
@@ -116,7 +149,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ])),
 
         //body
-        body: _pages[_currentIndex],
+        body: checkCompare(_currentIndex) ? _pages[_currentIndex]: _pages[3],
 
         //Adds Navigation bar to the bottom of the app screen
         bottomNavigationBar: CircularBottomNavigation(
