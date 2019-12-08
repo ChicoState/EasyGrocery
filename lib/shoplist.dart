@@ -5,13 +5,14 @@ import 'prices.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Shoplist extends StatefulWidget {
-  Shoplist({this.auth, this.store});
+  Shoplist({this.auth, this.list, this.store});
   final BaseAuth auth;
   //Pass by clicked on Store
   final GroceryStores store;
+  final List<Items> list;
 
   @override
-  ShoplistState createState() => ShoplistState();
+  ShoplistState createState() => ShoplistState(list);
 }
 
 //Class that stores a item and its information
@@ -26,6 +27,7 @@ class Shoplist extends StatefulWidget {
   }
 
 class ShoplistState extends State<Shoplist> {
+  ShoplistState(this.itemlist);
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
   //list to contain all items in the users grocery list
@@ -35,13 +37,17 @@ class ShoplistState extends State<Shoplist> {
   //User's UID
   String uid = "";
 
+  List<Items> itemlist;
+
   //Temporary list of static items with their prices
+  /*
   List<Items> itemlist = [
     Items("Nesquick Chocolate Milk", 2.50),
     Items("Cheez-it, family size", 5.25),
     Items("Dozen Eggs", 3.99),
     Items("Sourdough bread", 6.99),
   ];
+  */
 
   //Calls this to initialize the Firebase variables with user list
   void initState() {
