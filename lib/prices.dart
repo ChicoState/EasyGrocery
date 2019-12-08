@@ -4,6 +4,8 @@ import 'shoplist.dart';
 //Firebase Database
 import 'package:firebase_database/firebase_database.dart';
 import 'package:http/http.dart';
+import 'dart:convert';
+
 
 class Prices extends StatefulWidget {
   final BaseAuth auth;
@@ -15,6 +17,15 @@ class Prices extends StatefulWidget {
 
   @override
   PricesState createState() => PricesState(this.groceryList);
+}
+
+//class to store response from price compare that is passed to compare
+class PriceCompareReturn{
+  double safewayCost=0.0;
+  double walmartCost=0.0;
+  var safewayList=[];
+  var walmartList=[];
+  PriceCompareReturn(this.safewayCost, this.safewayList, this.walmartCost, this.walmartList);
 }
 
 //Class that stores a Grocery Store and its information
@@ -193,10 +204,11 @@ class PricesState extends State<Prices> {
               shape: StadiumBorder(side: BorderSide(color: Colors.black)),
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
-                priceCompare();
-                //Checks if enough stores were selected
+                Future<PriceCompareReturn> ret = priceCompare();
+                ret.then( (value){
+                  //Checks if enough stores were selected
                 if (checkEnough(_groceryStores)) {
-                  widget.callback(Compare(groceryStores: _groceryStores, auth: widget.auth, reset: (){
+                  widget.callback(Compare(groceryStores: _groceryStores, data: value, auth: widget.auth, reset: (){
                     widget.reset();
                   },
                   ));
@@ -204,6 +216,7 @@ class PricesState extends State<Prices> {
                 else { //Sends alert notifying that not enough stores were selected
                   alertForStores(context);
                 }
+                });
               },
             )
           ),
@@ -229,27 +242,53 @@ class PricesState extends State<Prices> {
     return jsonlist;
   }
 
-  void priceCompare() async{
+  List<Items> generateItemList(var jsonitems){
+    List<Items> items = [];
+    for(var i = 0; i < jsonitems.length; i++){
+      var part = jsonitems[i];
+      items.add(Items(part['name'], part['cost'] ));
+    }
+    return items;
+  }
+
+  Future<PriceCompareReturn> priceCompare() async{
     Map<String, String> headers = {"Content-type": "application/json"};
     var url = 'http://34.222.160.242:3000/Easygrocery/api/compare';
-    var json = encodeListAsJson();
-    var response = await post(url, headers: headers, body: json);
-    print(response.body);
+    var jsonText = encodeListAsJson();
+    var response = await post(url, headers: headers, body: jsonText);
+    var resp = jsonDecode(response.body);
+    //handle safeway
+    var safeway = resp[0];
+    var sCost = safeway['cost'];
+    //generate list of items from safeway
+    var sList = generateItemList(safeway['items']);
+    //var sUnk = safeway['unknown'];
+    //handle walmart
+    var walmart = resp[1];
+    var wCost = walmart['cost'];
+    //generate list of items from walmart
+    var wList = generateItemList(walmart['items']);
+    //var wUnk = walmart['unknown'];
+
+    PriceCompareReturn ret = PriceCompareReturn(sCost, sList, wCost, wList);
+    return ret;
   }
 
 }
 
 class Compare extends StatefulWidget {
-  Compare({this.auth, this.groceryStores, this.reset()});
+  Compare({this.auth, this.groceryStores, this.data, this.reset()});
   final BaseAuth auth;
   final List<GroceryStores> groceryStores;
+  final PriceCompareReturn data;
   final VoidCallback reset;
 
   @override
-  CompareState createState() => CompareState();
+  CompareState createState() => CompareState(data);
 }
 
 class CompareState extends State<Compare> {
+  CompareState(this.data);
   //Firebase database reference
   final dbRef = FirebaseDatabase.instance.reference();
   //list to contain all items in the users grocery list
@@ -258,6 +297,8 @@ class CompareState extends State<Compare> {
   List<dynamic> items = [];
   //User's UID
   String uid = "";
+  //container that hold the data to be displayed
+  PriceCompareReturn data;
 
   //Initialize the state with variables
   void initState() {
@@ -305,7 +346,8 @@ class CompareState extends State<Compare> {
               itemCount: widget.groceryStores.length,
               itemBuilder: (BuildContext context, int index) => Padding (
                 padding: EdgeInsets.only(left: 20, right: 20),
-                child: showShops(index),
+                
+                child: showShops(index, (index==0) ? data.walmartCost : data.safewayCost, (index==0) ? data.walmartList : data.safewayList ),
               ),
             ) ), ]
             ),
@@ -345,13 +387,12 @@ class CompareState extends State<Compare> {
 * and all is needed is the filename and dimensions for the image
 *
 */
-  Row showShops(int index) {
+  Row showShops(int index, double price, List<Items> list) {
     //Initiliaze shop variables
         GroceryStores store = widget.groceryStores[index];
         String filename = store.filename;
         int width = store.width;
         int height = store.height;
-        int price = 200;
         return
         Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -365,7 +406,7 @@ class CompareState extends State<Compare> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => Shoplist(
-                        store: store, auth: widget.auth)),
+                        store: store, list: list, auth: widget.auth)),
               );
             },
             child: ClipPath(
