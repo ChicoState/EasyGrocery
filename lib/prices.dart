@@ -21,8 +21,8 @@ class Prices extends StatefulWidget {
 
 //class to store response from price compare that is passed to compare
 class PriceCompareReturn{
-  double safewayCost=0.0;
-  double walmartCost=0.0;
+  var safewayCost=0.0;
+  var walmartCost=0.0;
   var safewayList=[];
   var walmartList=[];
   PriceCompareReturn(this.safewayCost, this.safewayList, this.walmartCost, this.walmartList);
@@ -246,7 +246,7 @@ class PricesState extends State<Prices> {
     List<Items> items = [];
     for(var i = 0; i < jsonitems.length; i++){
       var part = jsonitems[i];
-      items.add(Items(part['name'], part['cost'] ));
+      items.add(Items(part['name'], part['cost'].toDouble() ));
     }
     return items;
   }
