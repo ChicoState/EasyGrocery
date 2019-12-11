@@ -156,7 +156,7 @@ class SearchListState extends State<SearchList> {
       var resp = json.decode(response.body); //decode json response
       //resp is a list of hashmaps<string, dynamic>
       for(var i = 0; i < resp.length; i++){
-        _searchList.add( resp[i]['productName'].toString());
+        _searchList.add( resp[i]['ProductName'].toString());
       }
     }
     catch(exception){
