@@ -119,4 +119,15 @@ void main(){
     expect(find.byType(MaterialButton), findsOneWidget);
   });
 
+  //prices page looks right
+  testWidgets('Prices page page looks right', (WidgetTester tester) async {
+    Auth testauth = new Auth();
+    await tester.pumpWidget(new MaterialApp( home: Prices(auth: testauth)));
+    
+    expect(find.text("Safeway"), findsOneWidget);
+    expect(find.text("Walmart"), findsOneWidget);
+    expect(find.byType(MaterialButton), findsOneWidget);
+
+  });
+
 }
