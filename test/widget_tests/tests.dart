@@ -100,4 +100,23 @@ void main(){
       )));
       expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
     });
+
+    //test that list looks right
+     //test that register page looks right
+  testWidgets('List page looks right', (WidgetTester tester) async {
+    Auth testauth = new Auth();
+    await tester.pumpWidget(new MaterialApp( home: GroceryList(auth: testauth)));
+    //check that there are two floating action buttons
+    expect(find.text("0 items"), findsOneWidget);
+    expect(find.byType(FloatingActionButton), findsNWidgets(2));
+  });
+
+  //search page looks right
+  testWidgets('Search page page looks right', (WidgetTester tester) async {
+    await tester.pumpWidget(new MaterialApp( home: SearchList()));
+    //check that there are two floating action buttons
+    expect(find.byType(TextField), findsOneWidget);
+    expect(find.byType(MaterialButton), findsOneWidget);
+  });
+
 }
