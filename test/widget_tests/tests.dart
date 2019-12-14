@@ -55,6 +55,42 @@ void main(){
 
   });
 
+  testWidgets('Register button works', (WidgetTester tester) async {
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget( new MaterialApp(home: MyLoginPage(auth: testauth, title: "EasyGrocery", onSignedIn: testfunc)));
+
+    await tester.tap(find.byKey(Key('register')));
+    await tester.pumpAndSettle();
+    
+    expect(find.text('First Name'), findsOneWidget);
+    expect(find.text('Last Name'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Password'), findsOneWidget);
+    expect(find.text('Confirm Password'), findsOneWidget);
+
+  });
+
+  testWidgets('Register page works', (WidgetTester tester) async {
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget( new MaterialApp(home: MyLoginPage(auth: testauth, title: "EasyGrocery", onSignedIn: testfunc)));
+
+    await tester.tap(find.byKey(Key('register')));
+    await tester.pumpAndSettle();
+
+    await tester.enterText(find.byKey(Key('fname')), "Test");
+    await tester.enterText(find.byKey(Key('lname')), "McTest");
+    await tester.enterText(find.byKey(Key('email')), "thisIsATest");
+    await tester.enterText(find.byKey(Key('pass')), "testing4us");
+    await tester.enterText(find.byKey(Key('confpass')), "testing4us");
+
+    await tester.tap(find.byKey(Key('register')));
+    await tester.pumpAndSettle();
+
+    expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
+
+
+  });
+
   //test for homepage appbar header
   testWidgets('Check appbar head on homepage', (WidgetTester tester) async {
       BaseAuth testauth = new Auth();
