@@ -103,6 +103,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 child: Text('Submit'),
                 ),
                 MaterialButton(
+                  key: Key('register'),
                   //Register button with styling
                   onPressed: register,
                 child: Text('Create an account'),
