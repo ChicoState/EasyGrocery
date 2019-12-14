@@ -13,28 +13,33 @@ import 'package:EasyGrocery/splash.dart';
 
 
 void main(){
-  //calling test widget
- testWidgets('validate appBar string', (WidgetTester tester) async {
-   //set up what to test static on the widget
-   // creates a temporary widget to find
-   await tester.pumpWidget(MaterialApp(
-       home: Scaffold(
-         //appbar text
-         appBar: AppBar(
-           title: Text('EasyGrocery'),
-         ),
-       )
-   ));
-   //
-   expect(find.text('EasyGrocery'), findsOneWidget);
- });
-
- testWidgets('Check appbar head', (WidgetTester tester) async {
-    BaseAuth testauth;
-    await tester.pumpWidget(new MaterialApp( home: new MyHomePage(
-          auth: testauth,
-          title: "EasyGrocery",
-    )));
-    expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
+  
+  //test that Login page looks right
+  testWidgets('Login screen looks right', (WidgetTester tester) async {
+    await tester.pumpWidget( new MaterialApp(home: MyLoginPage(title: "EasyGrocery")) );
+    expect(find.text('Submit'), findsOneWidget);
+    expect(find.text('Create an account'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Password'), findsOneWidget);
   });
+
+  //test that register page looks right
+  testWidgets('Register screen looks right', (WidgetTester tester) async {
+    await tester.pumpWidget( new MaterialApp(home: MyRegisterPage(title: "EasyGrocery")) );
+    expect(find.text('First Name'), findsOneWidget);
+    expect(find.text('Last Name'), findsOneWidget);
+    expect(find.text('Email'), findsOneWidget);
+    expect(find.text('Password'), findsOneWidget);
+    expect(find.text('Confirm Password'), findsOneWidget);
+  });
+
+  //test for homepage appbar header
+  testWidgets('Check appbar head on homepage', (WidgetTester tester) async {
+      BaseAuth testauth;
+      await tester.pumpWidget(new MaterialApp( home: new MyHomePage(
+            auth: testauth,
+            title: "EasyGrocery",
+      )));
+      expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
+    });
 }
