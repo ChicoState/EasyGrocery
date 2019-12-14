@@ -31,10 +31,10 @@ void main(){
 
  testWidgets('Check appbar head', (WidgetTester tester) async {
     BaseAuth testauth;
-    await tester.pumpWidget(new MyHomePage(
+    await tester.pumpWidget(new MaterialApp( home: new MyHomePage(
           auth: testauth,
           title: "EasyGrocery",
-    ));
+    )));
     expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
   });
 }
