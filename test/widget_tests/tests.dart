@@ -30,7 +30,11 @@ void main(){
  });
 
  testWidgets('Check appbar head', (WidgetTester tester) async {
-    await tester.pumpWidget(new MyHomePage(title: "EasyGrocery"));
+    BaseAuth testauth;
+    await tester.pumpWidget(new MyHomePage(
+          auth: testauth,
+          title: "EasyGrocery",
+    ));
     expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
   });
 }
