@@ -33,9 +33,31 @@ void main(){
     expect(find.text('Confirm Password'), findsOneWidget);
   });
 
+
+  //test that login works
+  void testfunc(){
+      print("Testing");
+  }
+
+  testWidgets('Login works', (WidgetTester tester) async {
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget( new MaterialApp(home: MyLoginPage(auth: testauth, title: "EasyGrocery", onSignedIn: testfunc)));
+    //click username and input
+    await tester.enterText(find.byKey(Key('email')), 'easygrocery5@gmail.com');
+    await tester.enterText(find.byKey(Key('Password')), 'admin5');
+    await tester.tap(find.byKey(Key('submit')));
+    await tester.pump();
+
+    expect(find.widgetWithText(AppBar, 'EasyGrocery'), findsOneWidget);
+
+    //click password and input
+
+
+  });
+
   //test for homepage appbar header
   testWidgets('Check appbar head on homepage', (WidgetTester tester) async {
-      BaseAuth testauth;
+      BaseAuth testauth = new Auth();
       await tester.pumpWidget(new MaterialApp( home: new MyHomePage(
             auth: testauth,
             title: "EasyGrocery",
