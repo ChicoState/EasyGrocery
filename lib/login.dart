@@ -93,6 +93,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               //Added a submit button that goes to the next page upon press
               //and authenticates email and password
               MaterialButton(
+                key: Key("submit"),
                 //Login button with styling
                 onPressed: login,
                 elevation: 5,
