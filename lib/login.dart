@@ -54,6 +54,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
           children: <Widget>[
             //Added textboxes with an icon
             TextFormField(
+              key: Key("email"),
               decoration: new InputDecoration(
                 icon: Icon(Icons.email, color: Colors.black), 
                 helperText: "Email", 
@@ -72,6 +73,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               onSaved: (input) => _email = input,
             ),
             TextFormField(
+              key: Key("Password"),
               decoration: InputDecoration(
                 icon: Icon(Icons.lock, color: Colors.black), 
                 helperText: "Password", 
@@ -91,6 +93,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
               //Added a submit button that goes to the next page upon press
               //and authenticates email and password
               MaterialButton(
+                key: Key("submit"),
                 //Login button with styling
                 onPressed: login,
                 elevation: 5,
@@ -100,6 +103,7 @@ class _MyLoginPageState extends State<MyLoginPage> {
                 child: Text('Submit'),
                 ),
                 MaterialButton(
+                  key: Key('register'),
                   //Register button with styling
                   onPressed: register,
                 child: Text('Create an account'),

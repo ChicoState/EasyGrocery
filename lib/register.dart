@@ -62,6 +62,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
             //Added textboxes with an icon
             //First name textfield
             TextFormField(
+              key: Key('fname'),
               decoration: new InputDecoration(
                 icon: Icon(Icons.person_outline, color: Colors.black), 
                 helperText: "First Name", 
@@ -81,6 +82,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
 
             //Last name textfield
             TextFormField(
+              key: Key('lname'),
               decoration: new InputDecoration(
                 icon: Icon(Icons.person_outline, color: Colors.black), 
                 helperText: "Last Name", 
@@ -100,6 +102,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
 
             //Email textfield
             TextFormField(
+              key: Key('email'),
               decoration: new InputDecoration(
                 icon: Icon(Icons.email, color: Colors.black), 
                 helperText: "Email", 
@@ -119,6 +122,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
 
             //Password textfield
             TextFormField(
+              key: Key('pass'),
               decoration: InputDecoration(
                 icon: Icon(Icons.lock, color: Colors.black), 
                 helperText: "Password", 
@@ -138,6 +142,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
 
             //Confirm Password textfield
             TextFormField(
+              key: Key('confpass'),
               decoration: InputDecoration(
                 icon: Icon(Icons.lock, color: Colors.black), 
                 helperText: "Confirm Password", 
@@ -158,6 +163,7 @@ class _MyRegisterPageState extends State<MyRegisterPage> {
               obscureText: true,
               ),
               MaterialButton(
+                key: Key('register'),
                 //Login button with styling
                 onPressed: register,
                 elevation: 5,
