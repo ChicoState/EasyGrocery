@@ -21,13 +21,10 @@ void main(){
   //auth page testing for signout
   testWidgets('Auth page working on signout', (WidgetTester tester) async {
     BaseAuth testauth = new Auth();
-    await tester.pumpWidget( new MaterialApp(home: MyLoginPage(auth: testauth, title: "EasyGrocery", onSignedIn: testfunc)));
-    //click username and input
-    await tester.enterText(find.byKey(Key('email')), 'easygrocery5@gmail.com');
-    await tester.enterText(find.byKey(Key('Password')), 'admin5');
-    await tester.tap(find.byKey(Key('submit')));
-    await tester.pumpAndSettle();
+    Key temp;
+    await tester.pumpWidget( new MaterialApp(home: MyHomePage(auth: testauth, title: "EasyGrocery", onSignedOut: testfunc, key: temp,)));
     await tester.tap(find.byKey(Key('settings')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('logout')));
     await tester.pumpAndSettle();
 });
