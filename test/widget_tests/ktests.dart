@@ -28,4 +28,10 @@ void main(){
     await tester.tap(find.byKey(Key('logout')));
     await tester.pumpAndSettle();
 });
+
+  //auth page testing for register
+  testWidgets('Auth page working on registering user', (WidgetTester tester) async {
+    final BaseAuth testauth = new Auth();
+    testauth.createUserWithEmailAndPassword("test@gmail.com", "admin5");
+});
 }
