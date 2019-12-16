@@ -68,6 +68,7 @@ class ShoplistState extends State<Shoplist> {
           ),
         actions: <Widget>[
           FlatButton(
+            key: Key("escape"),
             child: Text(
               "Okay",
               style: TextStyle(color: Colors.black),
@@ -112,6 +113,7 @@ class ShoplistState extends State<Shoplist> {
             trailing: new Column(children: <Widget>[
               new Container(
                 child: new IconButton(
+                  key: Key("expire"+index.toString()),
                   icon: Icon(Icons.date_range, 
                   color: itemlist[index].selected ? Colors.white: Colors.grey),
                   onPressed: (){
@@ -125,6 +127,7 @@ class ShoplistState extends State<Shoplist> {
             /*itemlist[index].selected ? 
               Icon(Icons.date_range, color: Colors.white):
               Icon(Icons.date_range, color: Colors.grey),*/
+              key: Key("item"+index.toString()),
               onTap: (){
                 setState(() {
                   itemlist[index].selected = !itemlist[index].selected;

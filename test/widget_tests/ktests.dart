@@ -35,7 +35,7 @@ void main(){
     testauth.createUserWithEmailAndPassword("test@gmail.com", "admin5");
 });
 
-//page testing for grocery list
+  //page testing for grocery list
   testWidgets('Class grocery list check', (WidgetTester tester) async {
     BaseAuth testauth = new Auth();
     await tester.pumpWidget(new MaterialApp(home: Prices(auth: testauth,
@@ -43,11 +43,42 @@ void main(){
       reset: () {}
     )));
     await tester.pumpAndSettle();
-    print("testing!!!!!");
     await tester.tap(find.byKey(Key('Walmart')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('compare')));
     await tester.pumpAndSettle();
     expect(find.text("Select at least two stores to compare prices."), findsOneWidget);
+    await tester.tap(find.byKey(Key('escape')));
 });
+
+  //page testing for grocery list check off
+  /*testWidgets('Item grocery list check off expire alert', (WidgetTester tester) async {
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget(new MaterialApp(home: Shoplist(auth: testauth,
+    )));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('item0')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('expire0')));
+    await tester.pumpAndSettle();
+    expect(find.text("Enter an expiration date so we can remind you"), findsOneWidget);
+    await tester.tap(find.byKey(Key('escape')));
+});*/
+
+//will fail just to test that search code doesn't throw errors
+  testWidgets('Search works', (WidgetTester tester) async {
+    await tester.pumpWidget( new MaterialApp(home: new SearchList()));
+    await tester.enterText(find.byKey(Key('search')), 'eggs');
+    await tester.tap(find.byKey(Key('searchButton')));
+    await tester.pumpAndSettle();
+    expect(find.byType(Card), findsNothing);
+  });
+
+  //test for search list clear
+  testWidgets('Search clear works', (WidgetTester tester) async {
+    await tester.pumpWidget( new MaterialApp(home: new SearchList()));
+    await tester.tap(find.byKey(Key('search')));
+    await tester.pumpAndSettle();
+    expect(find.byType(Card), findsNothing);
+  });
 }
