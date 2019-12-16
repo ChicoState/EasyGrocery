@@ -81,4 +81,22 @@ void main(){
     await tester.pumpAndSettle();
     expect(find.byType(Card), findsNothing);
   });
+
+  //Test that favorites menu opens
+  testWidgets('Favorites menu opens', (WidgetTester tester) async {
+    Auth testauth = new Auth();
+    await tester.pumpWidget( new MaterialApp(home: new GroceryList(auth: testauth)));
+    await tester.tap(find.byKey(Key("favButton")));
+    await tester.pumpAndSettle();
+    expect(find.text("Favorites"), findsOneWidget);
+  });
+
+  //Test that search menu opens
+  testWidgets('search menu opens', (WidgetTester tester) async {
+    Auth testauth = new Auth();
+    await tester.pumpWidget( new MaterialApp(home: new GroceryList(auth: testauth)));
+    await tester.tap(find.byKey(Key("addButton")));
+    await tester.pumpAndSettle();
+    expect(find.text("Add An Item"), findsOneWidget);
+  });
 }

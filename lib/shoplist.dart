@@ -10,7 +10,7 @@ class Shoplist extends StatefulWidget {
   //Pass by clicked on Store
   final GroceryStores store;
   final List<Items> list;
-  bool test;
+  final bool test;
 
   @override
   ShoplistState createState() => ShoplistState(list);
