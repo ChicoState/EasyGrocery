@@ -52,9 +52,9 @@ void main(){
 });
 
   //page testing for grocery list check off
-  /*testWidgets('Item grocery list check off expire alert', (WidgetTester tester) async {
+  testWidgets('Item grocery list check off expire alert', (WidgetTester tester) async {
     BaseAuth testauth = new Auth();
-    await tester.pumpWidget(new MaterialApp(home: Shoplist(auth: testauth,
+    await tester.pumpWidget(new MaterialApp(home: Shoplist(auth: testauth, test: true,
     )));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('item0')));
@@ -63,7 +63,7 @@ void main(){
     await tester.pumpAndSettle();
     expect(find.text("Enter an expiration date so we can remind you"), findsOneWidget);
     await tester.tap(find.byKey(Key('escape')));
-});*/
+});
 
 //will fail just to test that search code doesn't throw errors
   testWidgets('Search works', (WidgetTester tester) async {
