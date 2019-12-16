@@ -81,6 +81,7 @@ class PriceCompareReturn{
         content: const Text('This feature is intended for when there are more than two stores.'),
         actions: <Widget>[
           FlatButton(
+            key: Key("escape"),
             child: Text(
               "Okay",
               style: TextStyle(color: Colors.black),
