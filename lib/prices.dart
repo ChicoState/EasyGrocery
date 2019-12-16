@@ -145,6 +145,7 @@ class PricesState extends State<Prices> {
   //A card that holds the design of the Grocery store style for the user to
   //click on and enable which locations they wanna look at
   Card makeTile(int index) => Card(
+    key: Key(_groceryStores[index].name),
     elevation: 8,
     margin: new EdgeInsets.symmetric(horizontal: 10, vertical: 6),
     child: InkWell(
@@ -199,24 +200,25 @@ class PricesState extends State<Prices> {
           ),
           Container(
             child: MaterialButton(
+              key: Key("compare"),
               child: Text('Compare', style: TextStyle(color: Colors.white)),
               padding: EdgeInsets.only(left: 50, right: 50),
               shape: StadiumBorder(side: BorderSide(color: Colors.black)),
               color: checkEnough(_groceryStores) ? (Colors.green) : (Colors.grey),
               onPressed: () {
-                Future<PriceCompareReturn> ret = priceCompare();
-                ret.then( (value){
                   //Checks if enough stores were selected
                 if (checkEnough(_groceryStores)) {
-                  widget.callback(Compare(groceryStores: _groceryStores, data: value, auth: widget.auth, reset: (){
-                    widget.reset();
-                  },
-                  ));
+                  Future<PriceCompareReturn> ret = priceCompare();
+                  ret.then( (value){
+                    widget.callback(Compare(groceryStores: _groceryStores, data: value, auth: widget.auth, reset: (){
+                      widget.reset();
+                    },
+                   ));
+                  });
                 }
                 else { //Sends alert notifying that not enough stores were selected
                   alertForStores(context);
                 }
-                });
               },
             )
           ),
