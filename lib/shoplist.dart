@@ -5,11 +5,12 @@ import 'prices.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class Shoplist extends StatefulWidget {
-  Shoplist({this.auth, this.list, this.store});
+  Shoplist({this.auth, this.list, this.store, this.test});
   final BaseAuth auth;
   //Pass by clicked on Store
   final GroceryStores store;
   final List<Items> list;
+  final bool test;
 
   @override
   ShoplistState createState() => ShoplistState(list);
@@ -39,20 +40,23 @@ class ShoplistState extends State<Shoplist> {
 
   List<Items> itemlist;
 
+//Fills list with items for testing purposes
+  void fillList(){
   //Temporary list of static items with their prices
-  /*
-  List<Items> itemlist = [
-    Items("Nesquick Chocolate Milk", 2.50),
-    Items("Cheez-it, family size", 5.25),
-    Items("Dozen Eggs", 3.99),
-    Items("Sourdough bread", 6.99),
-  ];
-  */
+    itemlist = [
+      Items("Nesquick Chocolate Milk", 2.50),
+      Items("Cheez-it, family size", 5.25),
+      Items("Dozen Eggs", 3.99),
+      Items("Sourdough bread", 6.99),
+    ];
+  }
 
   //Calls this to initialize the Firebase variables with user list
   void initState() {
     initializeVars();
     super.initState();
+    if (widget.test)
+      fillList();
   }
 
   Future expireDateNotify(BuildContext context) {
@@ -68,6 +72,7 @@ class ShoplistState extends State<Shoplist> {
           ),
         actions: <Widget>[
           FlatButton(
+            key: Key("escape"),
             child: Text(
               "Okay",
               style: TextStyle(color: Colors.black),
@@ -112,6 +117,7 @@ class ShoplistState extends State<Shoplist> {
             trailing: new Column(children: <Widget>[
               new Container(
                 child: new IconButton(
+                  key: Key("expire"+index.toString()),
                   icon: Icon(Icons.date_range, 
                   color: itemlist[index].selected ? Colors.white: Colors.grey),
                   onPressed: (){
@@ -125,6 +131,7 @@ class ShoplistState extends State<Shoplist> {
             /*itemlist[index].selected ? 
               Icon(Icons.date_range, color: Colors.white):
               Icon(Icons.date_range, color: Colors.grey),*/
+              key: Key("item"+index.toString()),
               onTap: (){
                 setState(() {
                   itemlist[index].selected = !itemlist[index].selected;

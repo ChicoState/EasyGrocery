@@ -45,6 +45,7 @@ class GroceryListState extends State<GroceryList> {
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: FloatingActionButton(
+                    key: Key("addButton"),
                     heroTag: "addButton",
                     onPressed: _searchMenu,
                     child: Icon(Icons.add),
@@ -62,6 +63,7 @@ class GroceryListState extends State<GroceryList> {
             Align(
               alignment: Alignment.bottomRight,
               child: FloatingActionButton(
+                key: Key("favButton"),
                 heroTag: "favButton",
                 onPressed: _favoritesMenu,
                 child: Icon(Icons.list),

@@ -98,6 +98,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //Icon button that acts as a settings to logout under
           actions: <Widget>[
             IconButton(
+              key: Key("settings"),
                 icon: Icon(
                   Icons.settings,
                   color: Colors.black,
@@ -134,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
                   ),
               ListTile(
+                  key: Key("logout"),
                   title: Text('Logout'),
                   onTap: () {
                     Navigator.pop(context);

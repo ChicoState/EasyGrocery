@@ -41,6 +41,7 @@ class SearchListState extends State<SearchList> {
         Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              key: Key("search"),
               onTap: () {
                 //clear search list when text field is tapped
                 _searchList.clear();
@@ -58,6 +59,7 @@ class SearchListState extends State<SearchList> {
             )),
         //Search button
         MaterialButton(
+          key: Key("searchButton"),
           onPressed: () {
             FocusScope.of(context).previousFocus(); //dismiss keyboard
             _search();
