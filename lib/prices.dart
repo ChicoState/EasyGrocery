@@ -280,11 +280,12 @@ class PricesState extends State<Prices> {
 }
 
 class Compare extends StatefulWidget {
-  Compare({this.auth, this.groceryStores, this.data, this.reset()});
+  Compare({this.auth, this.groceryStores, this.data, this.reset(), this.test});
   final BaseAuth auth;
   final List<GroceryStores> groceryStores;
   final PriceCompareReturn data;
   final VoidCallback reset;
+  final bool test;
 
   @override
   CompareState createState() => CompareState(data);
@@ -302,11 +303,20 @@ class CompareState extends State<Compare> {
   String uid = "";
   //container that hold the data to be displayed
   PriceCompareReturn data;
+  //List for testing
+  List<Items> tester = [];
 
   //Initialize the state with variables
   void initState() {
     initializeVars();
     super.initState();
+    if (widget.test) {
+      tester = [
+      Items("Nesquick Chocolate Milk", 2.50),
+      Items("Cheez-it, family size", 5.25),
+      Items("Dozen Eggs", 3.99),
+      Items("Sourdough bread", 6.99),];
+    }
   }
 
 //Initialize variables UID and Item list
@@ -350,7 +360,9 @@ class CompareState extends State<Compare> {
               itemBuilder: (BuildContext context, int index) => Padding (
                 padding: EdgeInsets.only(left: 20, right: 20),
                 
-                child: showShops(index, (index==0) ? data.walmartCost : data.safewayCost, (index==0) ? data.walmartList : data.safewayList ),
+                child: (!widget.test ? 
+                showShops(index, (index==0) ? data.walmartCost : data.safewayCost, (index==0) ? data.walmartList : data.safewayList )
+                : showShops(index, 20, tester))
               ),
             ) ), ]
             ),
@@ -432,7 +444,7 @@ class CompareState extends State<Compare> {
                 )
             ],),
               height: 200,
-              width: 125,
+              width: widget.test ? 0 : 125,
               decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(color: Colors.green, width: 5),

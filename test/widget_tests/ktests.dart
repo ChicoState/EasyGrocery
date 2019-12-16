@@ -99,4 +99,28 @@ void main(){
     await tester.pumpAndSettle();
     expect(find.text("Add An Item"), findsOneWidget);
   });
+
+  //test for main.dart
+  /*testWidgets('Main.dart render test', (WidgetTester tester) async {
+    await tester.pumpWidget(new MaterialApp(home: MyApp()));
+    await tester.pumpAndSettle();
+//    expect(find.text("EasyGrocery"), findsOneWidget);
+  });*/
+
+  //page testing for compare page
+  testWidgets('Class compare check', (WidgetTester tester) async {
+    List<GroceryStores> _groceryStores = <GroceryStores>[];
+    
+    //Create static locations for now
+    GroceryStores _walmart = 
+    new GroceryStores("Walmart", "2044 Forest Ave.", "walmart.png", 0, 0);
+    GroceryStores _safeway =
+    new GroceryStores("Safeway", "Chico Placeholder", "safeway.png", 0, 0);
+    _groceryStores.add(_walmart);
+    _groceryStores.add(_safeway);
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget(new MaterialApp(home: Compare(test: true, auth: testauth, groceryStores: _groceryStores, 
+    )));
+    await tester.pumpAndSettle();
+});
 }
