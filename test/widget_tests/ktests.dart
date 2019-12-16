@@ -34,4 +34,20 @@ void main(){
     final BaseAuth testauth = new Auth();
     testauth.createUserWithEmailAndPassword("test@gmail.com", "admin5");
 });
+
+//page testing for grocery list
+  testWidgets('Class grocery list check', (WidgetTester tester) async {
+    BaseAuth testauth = new Auth();
+    await tester.pumpWidget(new MaterialApp(home: Prices(auth: testauth,
+      callback: (newPage) {},
+      reset: () {}
+    )));
+    await tester.pumpAndSettle();
+    print("testing!!!!!");
+    await tester.tap(find.byKey(Key('Walmart')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('compare')));
+    await tester.pumpAndSettle();
+    expect(find.text("Select at least two stores to compare prices."), findsOneWidget);
+});
 }
